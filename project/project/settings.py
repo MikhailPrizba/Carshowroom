@@ -32,13 +32,18 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
+    #DJANGO_APPS
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
+    
+    #THIRD_PARTY_APPS
     'rest_framework',
+    
+    #LOCAL_APPS
 ]
 
 MIDDLEWARE = [
@@ -81,8 +86,8 @@ DATABASES = {
 		'NAME': os.environ.get('PS_DB_NAME'),
 		'USER': os.environ.get('PS_DB_USER'), 
 		'PASSWORD': os.environ.get('PS_DB_PASSWORD'), 
-		'HOST': '127.0.0.1', 
-		'PORT': '5432'
+		'HOST': os.environ.get('PS_DB_HOST'), 
+		'PORT': os.environ.get('PS_DB_PORT'),
 	}
 }
 
