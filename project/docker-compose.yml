@@ -1,0 +1,17 @@
+version: "3.9"
+
+services:
+  postgres:
+    image: postgres:15.1-alpine
+    env_file:
+      - .env
+
+  web:
+    build: .
+    depends_on:
+      - postgres
+    ports:
+      - "${WEB_PORT}:8000"
+
+volumes:
+  - ./project:/project
