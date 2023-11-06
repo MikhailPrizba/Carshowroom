@@ -41,6 +41,8 @@ DJANGO_APPS = [
 
 THIRD_PARTY_APPS = [
     'rest_framework',
+    'django_enum',
+    'django_countries',
 ]
 
 LOCAL_APPS = [
@@ -142,3 +144,5 @@ STATIC_URL = "static/"
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
+
+AUTH_USER_MODEL = "common.models.User"
