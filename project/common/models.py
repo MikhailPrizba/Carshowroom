@@ -1,12 +1,11 @@
-from django.contrib.auth.models import AbstractUser
 from django.core.validators import RegexValidator
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 from django_countries import fields
-from django_enum import IntegerChoices, TextChoices
+from django_enum import TextChoices
 
 
-class MainInformation(models.Model):
+class MainInformationMixin(models.Model):
     is_active = models.BooleanField(default=True)
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
@@ -15,7 +14,7 @@ class MainInformation(models.Model):
         abstract = True
 
 
-class UserInformation(models.Model):
+class UserInformationMixin(models.Model):
     email = models.EmailField(max_length=254)
     email_confirm = models.BooleanField(default=False)
     phone_number = models.CharField(blank=True, validators=[
@@ -26,7 +25,7 @@ class UserInformation(models.Model):
         abstract = True
 
 
-class Car(MainInformation):
+class CarInformationMixin(models.Model):
     class CarType(TextChoices):
         SEDAN = "Sed", _("Sedan")
         COUPE = "Cou", _("Coupe")
@@ -41,20 +40,5 @@ class Car(MainInformation):
     color = models.CharField(blank=True, max_length=10, default='Unknown')
     description = models.TextField(blank=True)
 
-    def __str__(self):
-        return self.name
-
-
-class User(AbstractUser):
-    class UserLevel(IntegerChoices):
-        UNKNOWN = 0
-        ADMIN = 1
-        SUPPLIER = 2
-        DEALERSHIP = 3
-        CUSTOMER = 4
-
-    user_level = models.IntegerField(
-        choices=UserLevel.choices, default=UserLevel.UNKNOWN)
-
-    def __str__(self):
-        return self.username
+    class Meta:
+        abstract = True
