@@ -4,16 +4,18 @@ from django.contrib.auth.models import AbstractUser
 # Create your models here.
 
 
+
 class User(AbstractUser):
-    class UserLevel(TextChoices):
+    class UserRoleChoices(TextChoices):
         UNKNOWN = 'UNKNOWN'
         ADMIN = 'ADMIN'
         SUPPLIER = 'SUPPLIER'
         DEALERSHIP = 'DEALERSHIP'
         CUSTOMER = 'CUSTOMER'
-
-    user_level = models.IntegerField(
-        choices=UserLevel.choices, default=UserLevel.UNKNOWN)
-
+        
+    
+    user_role = models.TextField(
+        choices=UserRoleChoices.choices, default=UserRoleChoices.UNKNOWN)
+    
     def __str__(self):
         return self.username

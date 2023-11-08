@@ -13,7 +13,24 @@ class SupplierManager(models.Manager):
 
     def update_instance(self, id,**kwargs):
         self.filter(id=id).update(**kwargs)
+        return self.get(id=id)
+        
+
+class SupplierCarManager(models.Manager):
+    def create_instance(self,  **kwargs):
+        return self.create(**kwargs)
+
+    def update_instance(self, id,**kwargs):
+        self.filter(id=id).update(**kwargs)
+        return self.get(id=id)
     
+class SupplierOfferManager(models.Manager):
+    def create_instance(self,  **kwargs):
+        return self.create(**kwargs)
+
+    def update_instance(self, id,**kwargs):
+        self.filter(id=id).update(**kwargs)
+        return self.get(id=id)
 
 class Supplier(MainInformationMixin, UserInformationMixin):
     user = models.OneToOneField(User, on_delete= models.CASCADE)
@@ -29,7 +46,7 @@ class SupplierCar(MainInformationMixin, CarInformationMixin):
     supplier = models.ForeignKey(Supplier, on_delete=models.CASCADE)
     price = models.DecimalField(max_digits=12, decimal_places=2, validators=[MinValueValidator(0.00)])
     count = models.IntegerField(default=1, validators=[MinValueValidator(0)])
-
+    objects = SupplierCarManager()
 
 
 class SupplierOffer(MainInformationMixin):
@@ -37,3 +54,4 @@ class SupplierOffer(MainInformationMixin):
     dealership = models.ForeignKey(Dealership, on_delete=models.CASCADE)
     max_price = models.DecimalField(max_digits=10, decimal_places=2, validators=[MinValueValidator(0.00)])
     paid = models.BooleanField(default=False)
+    objects = SupplierOfferManager()
