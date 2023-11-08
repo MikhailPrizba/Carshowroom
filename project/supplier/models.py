@@ -7,12 +7,21 @@ from common.models import CarInformationMixin, MainInformationMixin, UserInforma
 from dealership.models import Dealership
 from user.models import User
 
+class SupplierManager(models.Manager):
+    def create_instance(self,  **kwargs):
+        return self.create(**kwargs)
+
+    def update_instance(self, id,**kwargs):
+        self.filter(id=id).update(**kwargs)
+    
+
 class Supplier(MainInformationMixin, UserInformationMixin):
     user = models.OneToOneField(User, on_delete= models.CASCADE)
     foundation_year = models.PositiveIntegerField(
         validators=[MinValueValidator(1900), MaxValueValidator(datetime.date.today().year)]
     )
     balance = models.DecimalField(default=0, max_digits=15, decimal_places=2, validators=[MinValueValidator(0.00)])
+    objects = SupplierManager()
 
 
 
