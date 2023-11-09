@@ -15,7 +15,6 @@ class MainInformationMixin(models.Model):
 
 
 class UserInformationMixin(models.Model):
-    email = models.EmailField(max_length=254)
     email_confirm = models.BooleanField(default=False)
     phone_number = models.CharField(blank=True, validators=[
                                     RegexValidator(regex=r"^\+(?:[0-9] ?){6,14}[0-9]$")], max_length=12)

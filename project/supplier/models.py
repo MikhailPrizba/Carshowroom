@@ -8,7 +8,9 @@ from dealership.models import Dealership
 from user.models import User
 
 class SupplierManager(models.Manager):
-    def create_instance(self,  **kwargs):
+    def create_instance(self,  username, email, password,**kwargs):
+        user = User.objects.create_user(username=username, email=email, password=password)
+        kwargs['user'] = user
         return self.create(**kwargs)
 
     def update_instance(self, id,**kwargs):
