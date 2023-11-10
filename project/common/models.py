@@ -16,8 +16,11 @@ class MainInformationMixin(models.Model):
 
 class UserInformationMixin(models.Model):
     email_confirm = models.BooleanField(default=False)
-    phone_number = models.CharField(blank=True, validators=[
-                                    RegexValidator(regex=r"^\+(?:[0-9] ?){6,14}[0-9]$")], max_length=12)
+    phone_number = models.CharField(
+        blank=True,
+        validators=[RegexValidator(regex=r"^\+(?:[0-9] ?){6,14}[0-9]$")],
+        max_length=12,
+    )
     location = fields.CountryField()
 
     class Meta:
@@ -33,10 +36,11 @@ class CarInformationMixin(models.Model):
         HATCHBACK = "Hat", _("Hatchback")
 
     mark = models.CharField(max_length=7)
-    model = models.CharField(max_length=7, default='Unknown')
+    model = models.CharField(max_length=7, default="Unknown")
     car_type = models.CharField(
-        max_length=3, choices=CarType.choices, default=CarType.SEDAN)
-    color = models.CharField(blank=True, max_length=10, default='Unknown')
+        max_length=3, choices=CarType.choices, default=CarType.SEDAN
+    )
+    color = models.CharField(blank=True, max_length=10, default="Unknown")
     description = models.TextField(blank=True)
 
     class Meta:

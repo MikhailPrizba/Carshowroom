@@ -8,33 +8,38 @@ from django.core.validators import MinValueValidator
 from django.db import models
 from user.models import User
 
+
 class DealershipManager(models.Manager):
-    def create_instance(self,  username, email, password,**kwargs):
-        user = User.objects.create_user(username=username, email=email, password=password)
-        kwargs['user'] = user
+    def create_instance(self, username, email, password, **kwargs):
+        user = User.objects.create_user(
+            username=username, email=email, password=password
+        )
+        kwargs["user"] = user
         return self.create(**kwargs)
 
-    def update_instance(self, id,**kwargs):
+    def update_instance(self, id, **kwargs):
         self.filter(id=id).update(**kwargs)
         return self.get(id=id)
-        
+
 
 class DealershipCarManager(models.Manager):
-    def create_instance(self,  **kwargs):
+    def create_instance(self, **kwargs):
         return self.create(**kwargs)
 
-    def update_instance(self, id,**kwargs):
+    def update_instance(self, id, **kwargs):
         self.filter(id=id).update(**kwargs)
         return self.get(id=id)
-    
+
+
 class DealershipOfferManager(models.Manager):
-    def create_instance(self,  **kwargs):
+    def create_instance(self, **kwargs):
         return self.create(**kwargs)
 
-    def update_instance(self, id,**kwargs):
+    def update_instance(self, id, **kwargs):
         self.filter(id=id).update(**kwargs)
         return self.get(id=id)
-    
+
+
 class Dealership(MainInformationMixin, UserInformationMixin):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     balance = models.DecimalField(
@@ -50,6 +55,7 @@ class ShopCar(MainInformationMixin, CarInformationMixin):
     )
     count = models.IntegerField(default=1, validators=[MinValueValidator(0)])
     objects = DealershipCarManager()
+
 
 class ShopOffer(MainInformationMixin):
     customer = models.ForeignKey(Customer, on_delete=models.CASCADE)

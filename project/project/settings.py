@@ -10,8 +10,8 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.2/ref/settings/
 """
 
-from pathlib import Path
 import os
+from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -21,7 +21,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY')
+SECRET_KEY = os.environ.get("DJANGO_SECRET_KEY")
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -40,18 +40,17 @@ DJANGO_APPS = [
 ]
 
 THIRD_PARTY_APPS = [
-    'rest_framework',
-    'django_enum',
-    'django_countries',
+    "rest_framework",
+    "django_enum",
+    "django_countries",
 ]
 
 LOCAL_APPS = [
-    'common',
-    'customer',
-    'dealership',
-    'supplier',
-    'user',
-    
+    "common",
+    "customer",
+    "dealership",
+    "supplier",
+    "user",
 ]
 INSTALLED_APPS = [
     *DJANGO_APPS,
@@ -94,14 +93,14 @@ WSGI_APPLICATION = "project.wsgi.application"
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
 DATABASES = {
-    'default': { 
-		'ENGINE': os.environ.get('PS_DB_ENGINE'),    
-		'NAME': os.environ.get('PS_DB_NAME'),
-		'USER': os.environ.get('PS_DB_USER'), 
-		'PASSWORD': os.environ.get('PS_DB_PASSWORD'), 
-		'HOST': os.environ.get('PS_DB_HOST'), 
-		'PORT': os.environ.get('PS_DB_PORT'),
-	}
+    "default": {
+        "ENGINE": os.environ.get("PS_DB_ENGINE"),
+        "NAME": os.environ.get("PS_DB_NAME"),
+        "USER": os.environ.get("PS_DB_USER"),
+        "PASSWORD": os.environ.get("PS_DB_PASSWORD"),
+        "HOST": os.environ.get("PS_DB_HOST"),
+        "PORT": os.environ.get("PS_DB_PORT"),
+    }
 }
 
 
