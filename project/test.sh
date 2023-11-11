@@ -1,10 +1,5 @@
 #!/bin/bash
-
-# Активируйте виртуальное окружение
-
-
-# Перейдите в папку с тестами
-
+# Go to the tests folder
 cd project
-# Запустите тесты
+# run test
 pipenv run pytest

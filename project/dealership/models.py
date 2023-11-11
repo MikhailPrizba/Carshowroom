@@ -2,6 +2,9 @@ from common.models import (
     CarInformationMixin,
     MainInformationMixin,
     UserInformationMixin,
+    ModelManagerMixin,
+    ModelCarManagerMixin,
+    ModelOfferManagerMixin,
 )
 from customer.models import Customer
 from django.core.validators import MinValueValidator
@@ -9,35 +12,16 @@ from django.db import models
 from user.models import User
 
 
-class DealershipManager(models.Manager):
-    def create_instance(self, username, email, password, **kwargs):
-        user = User.objects.create_user(
-            username=username, email=email, password=password
-        )
-        kwargs["user"] = user
-        return self.create(**kwargs)
-
-    def update_instance(self, id, **kwargs):
-        self.filter(id=id).update(**kwargs)
-        return self.get(id=id)
+class DealershipManager(ModelManagerMixin):
+    pass
 
 
-class DealershipCarManager(models.Manager):
-    def create_instance(self, **kwargs):
-        return self.create(**kwargs)
-
-    def update_instance(self, id, **kwargs):
-        self.filter(id=id).update(**kwargs)
-        return self.get(id=id)
+class DealershipCarManager(ModelCarManagerMixin):
+    pass
 
 
-class DealershipOfferManager(models.Manager):
-    def create_instance(self, **kwargs):
-        return self.create(**kwargs)
-
-    def update_instance(self, id, **kwargs):
-        self.filter(id=id).update(**kwargs)
-        return self.get(id=id)
+class DealershipOfferManager(ModelOfferManagerMixin):
+    pass
 
 
 class Dealership(MainInformationMixin, UserInformationMixin):

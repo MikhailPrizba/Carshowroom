@@ -4,6 +4,9 @@ from common.models import (
     CarInformationMixin,
     MainInformationMixin,
     UserInformationMixin,
+    ModelManagerMixin,
+    ModelCarManagerMixin,
+    ModelOfferManagerMixin,
 )
 from dealership.models import Dealership
 from django.core.validators import MaxValueValidator, MinValueValidator
@@ -11,97 +14,16 @@ from django.db import models
 from user.models import User
 
 
-class SupplierManager(models.Manager):
-    def create_instance(
-        self, username: str, email: str, password: str, **kwargs
-    ) -> "Supplier":
-        """
-        Create a new Supplier instance with a related User.
-
-        Parameters:
-        - username (str): The username for the User.
-        - email (str): The email for the User.
-        - password (str): The password for the User.
-        - **kwargs: Additional fields for the Supplier model.
-
-        Returns:
-        - Supplier: The created Supplier instance.
-        """
-        user = User.objects.create_user(
-            username=username, email=email, password=password
-        )
-        kwargs["user"] = user
-        return self.create(**kwargs)
-
-    def update_instance(self, id: int, **kwargs) -> "Supplier":
-        """
-        Update a Supplier instance.
-
-        Parameters:
-        - id (int): The ID of the Supplier instance to be updated.
-        - **kwargs: Fields to be updated.
-
-        Returns:
-        - Supplier: The updated Supplier instance.
-        """
-        self.filter(id=id).update(**kwargs)
-        return self.get(id=id)
+class SupplierManager(ModelManagerMixin):
+    pass
 
 
-class SupplierCarManager(models.Manager):
-    def create_instance(self, **kwargs) -> "SupplierCar":
-        """
-        Create a new SupplierCar instance.
-
-        Parameters:
-        - **kwargs: Fields for the SupplierCar model.
-
-        Returns:
-        - SupplierCar: The created SupplierCar instance.
-        """
-        return self.create(**kwargs)
-
-    def update_instance(self, id: int, **kwargs) -> "SupplierCar":
-        """
-        Update a SupplierCar instance.
-
-        Parameters:
-        - id (int): The ID of the SupplierCar instance to be updated.
-        - **kwargs: Fields to be updated.
-
-        Returns:
-        - SupplierCar: The updated SupplierCar instance.
-        """
-        self.filter(id=id).update(**kwargs)
-        return self.get(id=id)
+class SupplierCarManager(ModelCarManagerMixin):
+    pass
 
 
-class SupplierOfferManager(models.Manager):
-    def create_instance(self, **kwargs) -> "SupplierOffer":
-        """
-        Create a new SupplierOffer instance.
-
-        Parameters:
-        - **kwargs: Fields for the SupplierOffer model.
-
-        Returns:
-        - SupplierOffer: The created SupplierOffer instance.
-        """
-        return self.create(**kwargs)
-
-    def update_instance(self, id: int, **kwargs) -> "SupplierOffer":
-        """
-        Update a SupplierOffer instance.
-
-        Parameters:
-        - id (int): The ID of the SupplierOffer instance to be updated.
-        - **kwargs: Fields to be updated.
-
-        Returns:
-        - SupplierOffer: The updated SupplierOffer instance.
-        """
-        self.filter(id=id).update(**kwargs)
-        return self.get(id=id)
+class SupplierOfferManager(ModelOfferManagerMixin):
+    pass
 
 
 class Supplier(MainInformationMixin, UserInformationMixin):

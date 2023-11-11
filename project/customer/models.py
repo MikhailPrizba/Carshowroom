@@ -1,20 +1,11 @@
-from common.models import MainInformationMixin, UserInformationMixin
+from common.models import MainInformationMixin, UserInformationMixin, ModelManagerMixin
 from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db import models
 from user.models import User
 
 
-class CustomerManager(models.Manager):
-    def create_instance(self, username, email, password, **kwargs):
-        user = User.objects.create_user(
-            username=username, email=email, password=password
-        )
-        kwargs["user"] = user
-        return self.create(**kwargs)
-
-    def update_instance(self, id, **kwargs):
-        self.filter(id=id).update(**kwargs)
-        return self.get(id=id)
+class CustomerManager(ModelManagerMixin):
+    pass
 
 
 class Customer(MainInformationMixin, UserInformationMixin):
