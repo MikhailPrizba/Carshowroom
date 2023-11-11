@@ -14,17 +14,23 @@ repos:
       - id: detect-private-key
       - id: debug-statements
 
-
-
-
   - repo: https://github.com/psf/black
     rev: 23.1.0
     hooks:
       - id: black
         exclude: ^.*\b(migrations)\b.*$
 
+  - repo: https://github.com/pycqa/flake8
+    rev: 6.1.0
+    hooks:
+      - id: flake8
+        args: ["--ignore=E501,F401"]
 
-
+#  - repo: https://github.com/pylint-dev/pylint
+#    rev: v3.0.1
+#    hooks:
+#      - id: pylint
+#        args: ["--output-format=colorized"]
 
   - repo: local
     hooks:
@@ -32,4 +38,3 @@ repos:
         name: Run tests
         entry: sh project/test.sh
         language: system
-        verbose: true
