@@ -20,7 +20,8 @@ class SupplierManager(ModelManagerMixin):
             username=username, email=email, password=password
         )
         kwargs["user"] = user
-        return self.create(**kwargs)
+        instance = super().create_instance(**kwargs)
+        return instance
 
 
 class SupplierCarManager(ModelManagerMixin):
