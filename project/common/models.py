@@ -65,62 +65,6 @@ class ModelManagerMixin(models.Manager):
         Returns the updated instance.
     """
 
-    def create_instance(
-        self, username: str, email: str, password: str, **kwargs
-    ) -> models.Model:
-        user = User.objects.create_user(
-            username=username, email=email, password=password
-        )
-        kwargs["user"] = user
-        return self.create(**kwargs)
-
-    def update_instance(self, id: int, **kwargs) -> models.Model:
-        self.filter(id=id).update(**kwargs)
-        return self.get(id=id)
-
-
-class ModelCarManagerMixin(models.Manager):
-    """
-    A mixin for managing car models.
-
-    Attributes:
-    - None
-
-    Methods:
-    - create_instance(**kwargs) -> CarInstance:
-        Creates a new car instance with the provided keyword arguments.
-        Returns the created instance.
-
-    - update_instance(id: int, **kwargs) -> CarInstance:
-        Updates the car instance with the specified ID using the provided keyword arguments.
-        Returns the updated instance.
-    """
-
-    def create_instance(self, **kwargs) -> models.Model:
-        return self.create(**kwargs)
-
-    def update_instance(self, id: int, **kwargs) -> models.Model:
-        self.filter(id=id).update(**kwargs)
-        return self.get(id=id)
-
-
-class ModelOfferManagerMixin(models.Manager):
-    """
-    A mixin for managing offer models.
-
-    Attributes:
-    - None
-
-    Methods:
-    - create_instance(**kwargs) -> OfferInstance:
-        Creates a new offer instance with the provided keyword arguments.
-        Returns the created instance.
-
-    - update_instance(id: int, **kwargs) -> OfferInstance:
-        Updates the offer instance with the specified ID using the provided keyword arguments.
-        Returns the updated instance.
-    """
-
     def create_instance(self, **kwargs) -> models.Model:
         return self.create(**kwargs)
 

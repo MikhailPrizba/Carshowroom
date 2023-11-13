@@ -5,7 +5,14 @@ from user.models import User
 
 
 class CustomerManager(ModelManagerMixin):
-    pass
+    def create_instance(
+        self, username: str, email: str, password: str, **kwargs
+    ) -> models.Model:
+        user = User.objects.create_user(
+            username=username, email=email, password=password
+        )
+        kwargs["user"] = user
+        return self.create(**kwargs)
 
 
 class Customer(MainInformationMixin, UserInformationMixin):

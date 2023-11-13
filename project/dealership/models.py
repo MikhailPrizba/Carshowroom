@@ -3,8 +3,6 @@ from common.models import (
     MainInformationMixin,
     UserInformationMixin,
     ModelManagerMixin,
-    ModelCarManagerMixin,
-    ModelOfferManagerMixin,
 )
 from customer.models import Customer
 from django.core.validators import MinValueValidator
@@ -13,14 +11,21 @@ from user.models import User
 
 
 class DealershipManager(ModelManagerMixin):
+    def create_instance(
+        self, username: str, email: str, password: str, **kwargs
+    ) -> models.Model:
+        user = User.objects.create_user(
+            username=username, email=email, password=password
+        )
+        kwargs["user"] = user
+        return self.create(**kwargs)
+
+
+class DealershipCarManager(ModelManagerMixin):
     pass
 
 
-class DealershipCarManager(ModelCarManagerMixin):
-    pass
-
-
-class DealershipOfferManager(ModelOfferManagerMixin):
+class DealershipOfferManager(ModelManagerMixin):
     pass
 
 
@@ -32,7 +37,7 @@ class Dealership(MainInformationMixin, UserInformationMixin):
     objects = DealershipManager()
 
 
-class ShopCar(MainInformationMixin, CarInformationMixin):
+class DealershipCar(MainInformationMixin, CarInformationMixin):
     dealership = models.ForeignKey(Dealership, on_delete=models.CASCADE)
     price = models.DecimalField(
         default=0, max_digits=12, decimal_places=2, validators=[MinValueValidator(0.00)]
@@ -41,7 +46,7 @@ class ShopCar(MainInformationMixin, CarInformationMixin):
     objects = DealershipCarManager()
 
 
-class ShopOffer(MainInformationMixin):
+class DealershipOffer(MainInformationMixin):
     customer = models.ForeignKey(Customer, on_delete=models.CASCADE)
     dealership = models.ForeignKey(Dealership, on_delete=models.CASCADE)
     max_price = models.DecimalField(

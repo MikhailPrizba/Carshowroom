@@ -5,8 +5,6 @@ from common.models import (
     MainInformationMixin,
     UserInformationMixin,
     ModelManagerMixin,
-    ModelCarManagerMixin,
-    ModelOfferManagerMixin,
 )
 from dealership.models import Dealership
 from django.core.validators import MaxValueValidator, MinValueValidator
@@ -15,14 +13,21 @@ from user.models import User
 
 
 class SupplierManager(ModelManagerMixin):
+    def create_instance(
+        self, username: str, email: str, password: str, **kwargs
+    ) -> models.Model:
+        user = User.objects.create_user(
+            username=username, email=email, password=password
+        )
+        kwargs["user"] = user
+        return self.create(**kwargs)
+
+
+class SupplierCarManager(ModelManagerMixin):
     pass
 
 
-class SupplierCarManager(ModelCarManagerMixin):
-    pass
-
-
-class SupplierOfferManager(ModelOfferManagerMixin):
+class SupplierOfferManager(ModelManagerMixin):
     pass
 
 
