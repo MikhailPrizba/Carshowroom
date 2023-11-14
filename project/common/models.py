@@ -3,10 +3,11 @@ from django.db import models
 from django.utils.translation import gettext_lazy as _
 from django_countries import fields
 from django_enum import TextChoices
-from user.models import User
+import uuid
 
 
 class MainInformationMixin(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     is_active = models.BooleanField(default=True)
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
