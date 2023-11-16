@@ -1,4 +1,9 @@
-from common.models import MainInformationMixin, UserInformationMixin, ModelManagerMixin
+from common.models import (
+    MainInformationMixin,
+    UserInformationMixin,
+    ModelManagerMixin,
+    CarInformationMixin,
+)
 from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db import models
 from user.models import User
@@ -18,3 +23,10 @@ class Customer(MainInformationMixin, UserInformationMixin):
         default=0, max_digits=12, decimal_places=2, validators=[MinValueValidator(0.00)]
     )
     objects = CustomerManager()
+
+
+class CustomerOffer(CarInformationMixin, MainInformationMixin):
+    customer = models.ForeignKey(Customer, on_delete=models.CASCADE)
+    max_price = models.DecimalField(
+        max_digits=10, decimal_places=2, validators=[MinValueValidator(0.00)]
+    )
