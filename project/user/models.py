@@ -14,7 +14,6 @@ class User(AbstractUser):
         DEALERSHIP = "DEALERSHIP"
         CUSTOMER = "CUSTOMER"
 
-    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     user_role = models.TextField(
         choices=UserRoleChoices.choices, default=UserRoleChoices.UNKNOWN
     )

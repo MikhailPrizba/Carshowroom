@@ -9,9 +9,11 @@ class TestDealershipModel:
     def test_dealership_creation(self):
         # ARRANGE
         dealership_data = {
-            "username": "dealership",
-            "email": "dealership@email.com",
-            "password": "dealershippassword",
+            "user": {
+                "username": "dealership",
+                "email": "dealership@email.com",
+                "password": "dealershippassword",
+            },
             "phone_number": "+1234567890",
             "balance": 100,
         }
@@ -20,8 +22,8 @@ class TestDealershipModel:
         dealership = Dealership.objects.create_instance(**dealership_data)
 
         # ASSERT
-        assert dealership.user.username == dealership_data["username"]
-        assert dealership.user.email == dealership_data["email"]
+        assert dealership.user.username == dealership_data["user"]["username"]
+        assert dealership.user.email == dealership_data["user"]["email"]
         assert dealership.phone_number == dealership_data["phone_number"]
         assert dealership.balance == dealership_data["balance"]
 

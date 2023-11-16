@@ -9,9 +9,11 @@ class TestSupplierModel:
     def test_supplier_creation(self):
         # ARRANGE
         supplier_data = {
-            "username": "supplier",
-            "email": "supplier@email.com",
-            "password": "supplierpassword",
+            "user": {
+                "username": "supplier",
+                "email": "supplier@email.com",
+                "password": "supplierpassword",
+            },
             "phone_number": "+1234567890",
             "foundation_year": 2000,
             "balance": 100,
@@ -21,8 +23,8 @@ class TestSupplierModel:
         supplier = Supplier.objects.create_instance(**supplier_data)
 
         # ASSERT
-        assert supplier.user.username == supplier_data["username"]
-        assert supplier.user.email == supplier_data["email"]
+        assert supplier.user.username == supplier_data["user"]["username"]
+        assert supplier.user.email == supplier_data["user"]["email"]
         assert supplier.phone_number == supplier_data["phone_number"]
         assert supplier.foundation_year == supplier_data["foundation_year"]
         assert supplier.balance == supplier_data["balance"]

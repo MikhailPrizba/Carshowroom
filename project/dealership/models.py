@@ -11,12 +11,8 @@ from user.models import User
 
 
 class DealershipManager(ModelManagerMixin):
-    def create_instance(
-        self, username: str, email: str, password: str, **kwargs
-    ) -> models.Model:
-        user = User.objects.create_user(
-            username=username, email=email, password=password
-        )
+    def create_instance(self, **kwargs) -> models.Model:
+        user = User.objects.create_user(**kwargs.get("user"))
         kwargs["user"] = user
         instance = super().create_instance(**kwargs)
         return instance

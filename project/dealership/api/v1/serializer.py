@@ -1,8 +1,11 @@
 from rest_framework import serializers
 from dealership.models import Dealership, DealershipCar, DealershipOffer
+from user.api.v1.serializer import UserSerializer
 
 
 class DealershipSerializer(serializers.ModelSerializer):
+    user = UserSerializer()
+
     class Meta:
         model = Dealership
         fields = (
