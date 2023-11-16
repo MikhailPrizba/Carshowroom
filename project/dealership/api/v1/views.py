@@ -36,12 +36,16 @@ class DealershipCarViewSet(viewsets.ModelViewSet):
             dealership__user=self.request.user.pk, is_active=True
         )
 
+    def perform_create(self, serializer):
+        serializer.validated_data["dealership"] = Dealership.objects.get(
+            user=self.request.user
+        )
+        serializer.save()
+
     def destroy(self, request, pk=None):
         instance = self.get_object()
-
         instance.is_active = False
         instance.save()
-
         return Response(status=status.HTTP_204_NO_CONTENT)
 
 
@@ -55,8 +59,6 @@ class DealershipOfferViewSet(viewsets.ModelViewSet):
 
     def destroy(self, request, pk=None):
         instance = self.get_object()
-
         instance.is_active = False
         instance.save()
-
         return Response(status=status.HTTP_204_NO_CONTENT)

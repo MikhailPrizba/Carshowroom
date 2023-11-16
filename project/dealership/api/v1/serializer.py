@@ -26,7 +26,7 @@ class DealershipCarSerializer(serializers.ModelSerializer):
         model = DealershipCar
         fields = (
             "id",
-            "dealership",
+            # "dealership",
             "mark",
             "model",
             "car_type",
