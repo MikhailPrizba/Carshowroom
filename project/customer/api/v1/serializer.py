@@ -1,4 +1,5 @@
 from rest_framework import serializers
+from common.serializer import car_fields
 from customer.models import Customer, CustomerOffer
 from user.api.v1.serializer import UserSerializer
 
@@ -24,15 +25,4 @@ class CustomerSerializer(serializers.ModelSerializer):
 class CustomerOfferSerializer(serializers.ModelSerializer):
     class Meta:
         model = CustomerOffer
-        fields = (
-            "id",
-            "mark",
-            "model",
-            "car_type",
-            "color",
-            "description",
-            "max_price",
-            "is_active",
-            "created",
-            "updated",
-        )
+        fields = car_fields + ["max_price"]
