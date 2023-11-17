@@ -1,9 +1,11 @@
 from rest_framework import viewsets
+from drf_spectacular.utils import extend_schema
 
 from customer.models import Customer, CustomerOffer
 from .serializer import CustomerSerializer, CustomerOfferSerializer
 
 
+@extend_schema(tags=["customer/v1"])
 class CustomerViewSet(viewsets.ModelViewSet):
     serializer_class = CustomerSerializer
 
@@ -17,6 +19,7 @@ class CustomerViewSet(viewsets.ModelViewSet):
         instance.soft_delete()
 
 
+@extend_schema(tags=["customer_offer/v1"])
 class CustomerOfferViewSet(viewsets.ModelViewSet):
     serializer_class = CustomerOfferSerializer
 

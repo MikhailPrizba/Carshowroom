@@ -1,5 +1,5 @@
-from rest_framework import mixins, status, viewsets
-from rest_framework.response import Response
+from rest_framework import viewsets
+from drf_spectacular.utils import extend_schema
 
 from dealership.models import Dealership, DealershipCar
 from .serializer import (
@@ -7,9 +7,9 @@ from .serializer import (
     DealershipCarSerializer,
     DealershipOfferSerializer,
 )
-from django.db.models import Q
 
 
+@extend_schema(tags=["dealership/v1"])
 class DealershipViewSet(viewsets.ModelViewSet):
     serializer_class = DealershipSerializer
 
@@ -19,15 +19,11 @@ class DealershipViewSet(viewsets.ModelViewSet):
     def perform_create(self, serializer):
         Dealership.objects.create_instance(**serializer.data)
 
-    def destroy(self, request, pk=None):
-        instance = self.get_object()
-
-        instance.is_active = False
-        instance.save()
-
-        return Response(status=status.HTTP_204_NO_CONTENT)
+    def perform_destroy(self, instance):
+        instance.soft_delete()
 
 
+@extend_schema(tags=["dealership_car/v1"])
 class DealershipCarViewSet(viewsets.ModelViewSet):
     serializer_class = DealershipCarSerializer
 
@@ -46,6 +42,7 @@ class DealershipCarViewSet(viewsets.ModelViewSet):
         instance.soft_delete()
 
 
+@extend_schema(tags=["dealership_offer/v1"])
 class DealershipOfferViewSet(viewsets.ModelViewSet):
     serializer_class = DealershipOfferSerializer
 

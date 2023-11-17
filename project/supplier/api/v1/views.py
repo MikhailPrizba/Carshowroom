@@ -1,10 +1,10 @@
-from rest_framework import mixins, status, viewsets
-from rest_framework.response import Response
-
+from rest_framework import viewsets
+from drf_spectacular.utils import extend_schema
 from supplier.models import Supplier, SupplierCar
 from .serializer import SupplierSerializer, SupplierCarSerializer
 
 
+@extend_schema(tags=["supplier/v1"])
 class SupplierViewSet(viewsets.ModelViewSet):
     serializer_class = SupplierSerializer
 
@@ -18,6 +18,7 @@ class SupplierViewSet(viewsets.ModelViewSet):
         instance.soft_delete()
 
 
+@extend_schema(tags=["supplier_car/v1"])
 class SupplierCarViewSet(viewsets.ModelViewSet):
     serializer_class = SupplierCarSerializer
 
