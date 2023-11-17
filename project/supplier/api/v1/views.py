@@ -14,13 +14,8 @@ class SupplierViewSet(viewsets.ModelViewSet):
     def perform_create(self, serializer):
         Supplier.objects.create_instance(**serializer.data)
 
-    def delete(self, request, pk=None):
-        instance = self.get_object()
-
-        instance.is_active = False
-        instance.save()
-
-        return Response(status=status.HTTP_204_NO_CONTENT)
+    def perform_destroy(self, instance):
+        instance.soft_delete()
 
 
 class SupplierCarViewSet(viewsets.ModelViewSet):
@@ -37,8 +32,5 @@ class SupplierCarViewSet(viewsets.ModelViewSet):
         )
         serializer.save()
 
-    def destroy(self, request, pk=None):
-        instance = self.get_object()
-        instance.is_active = False
-        instance.save()
-        return Response(status=status.HTTP_204_NO_CONTENT)
+    def perform_destroy(self, instance):
+        instance.soft_delete()

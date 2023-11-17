@@ -42,11 +42,8 @@ class DealershipCarViewSet(viewsets.ModelViewSet):
         )
         serializer.save()
 
-    def destroy(self, request, pk=None):
-        instance = self.get_object()
-        instance.is_active = False
-        instance.save()
-        return Response(status=status.HTTP_204_NO_CONTENT)
+    def perform_destroy(self, instance):
+        instance.soft_delete()
 
 
 class DealershipOfferViewSet(viewsets.ModelViewSet):
@@ -57,8 +54,5 @@ class DealershipOfferViewSet(viewsets.ModelViewSet):
             dealership__user=self.request.user.pk, is_active=True
         )
 
-    def destroy(self, request, pk=None):
-        instance = self.get_object()
-        instance.is_active = False
-        instance.save()
-        return Response(status=status.HTTP_204_NO_CONTENT)
+    def perform_destroy(self, instance):
+        instance.soft_delete()

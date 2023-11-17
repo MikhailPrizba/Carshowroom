@@ -1,6 +1,4 @@
-from rest_framework import mixins, status, viewsets
-from rest_framework.decorators import action
-from rest_framework.response import Response
+from rest_framework import viewsets
 
 from customer.models import Customer, CustomerOffer
 from .serializer import CustomerSerializer, CustomerOfferSerializer
@@ -15,11 +13,8 @@ class CustomerViewSet(viewsets.ModelViewSet):
     def perform_create(self, serializer):
         Customer.objects.create_instance(**serializer.data)
 
-    def delete(self, request, pk=None):
-        instance = self.get_object()
-
-        instance.is_active = False
-        instance.save()
+    def perform_destroy(self, instance):
+        instance.soft_delete()
 
 
 class CustomerOfferViewSet(viewsets.ModelViewSet):
@@ -36,8 +31,5 @@ class CustomerOfferViewSet(viewsets.ModelViewSet):
         )
         serializer.save()
 
-    def destroy(self, request, pk=None):
-        instance = self.get_object()
-        instance.is_active = False
-        instance.save()
-        return Response(status=status.HTTP_204_NO_CONTENT)
+    def perform_destroy(self, instance):
+        instance.soft_delete()

@@ -15,6 +15,10 @@ class MainInformationMixin(models.Model):
     class Meta:
         abstract = True
 
+    def soft_delete(self):
+        self.is_active = False
+        self.save()
+
 
 class UserInformationMixin(models.Model):
     email_confirm = models.BooleanField(default=False)
