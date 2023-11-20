@@ -12,7 +12,9 @@ from user.models import User
 
 class DealershipManager(ModelManagerMixin):
     def create_instance(self, **kwargs) -> models.Model:
-        user = User.objects.create_user(user_role="DEALERSHIP", **kwargs.get("user"))
+        user = User.objects.create_user(
+            user_role=User.UserRoleChoices.DEALERSHIP, **kwargs.get("user")
+        )
         kwargs["user"] = user
         instance = super().create_instance(**kwargs)
         return instance

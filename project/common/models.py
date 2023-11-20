@@ -15,10 +15,6 @@ class MainInformationMixin(models.Model):
     class Meta:
         abstract = True
 
-    def soft_delete(self):
-        self.is_active = False
-        self.save()
-
 
 class UserInformationMixin(models.Model):
     email_confirm = models.BooleanField(default=False)
@@ -76,3 +72,7 @@ class ModelManagerMixin(models.Manager):
     def update_instance(self, id: int, **kwargs) -> models.Model:
         self.filter(id=id).update(**kwargs)
         return self.get(id=id)
+
+    def soft_delete(self, instance):
+        instance.is_active = False
+        instance.save()

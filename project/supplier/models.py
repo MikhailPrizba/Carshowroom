@@ -14,7 +14,9 @@ from user.models import User
 
 class SupplierManager(ModelManagerMixin):
     def create_instance(self, **kwargs) -> models.Model:
-        user = User.objects.create_user(user_role="SUPPLIER", **kwargs.get("user"))
+        user = User.objects.create_user(
+            user_role=User.UserRoleChoices.SUPPLIER, **kwargs.get("user")
+        )
         kwargs["user"] = user
         instance = super().create_instance(**kwargs)
         return instance

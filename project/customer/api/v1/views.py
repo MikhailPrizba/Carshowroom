@@ -16,7 +16,7 @@ class CustomerViewSet(viewsets.ModelViewSet):
         Customer.objects.create_instance(**serializer.data)
 
     def perform_destroy(self, instance):
-        instance.soft_delete()
+        Customer.objects.soft_delete(instance)
 
 
 @extend_schema(tags=["customer_offer/v1"])

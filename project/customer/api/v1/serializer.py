@@ -9,23 +9,12 @@ class CustomerSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Customer
-        fields = (
-            "id",
-            "user",
-            "balance",
-            "email_confirm",
-            "phone_number",
-            "location",
-            "is_active",
-            "created",
-            "updated",
-        )
+        fields = "__all__"
 
 
-class CustomerOfferSerializer(
-    CarSerializer,
-    serializers.ModelSerializer,
-):
-    class Meta(CarSerializer.Meta):
+class CustomerOfferSerializer(serializers.ModelSerializer):
+    customer = serializers.HiddenField(default=None)
+
+    class Meta:
         model = CustomerOffer
-        fields = CarSerializer.Meta.car_fields + ["max_price"]
+        fields = "__all__"
