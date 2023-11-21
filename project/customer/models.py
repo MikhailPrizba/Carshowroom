@@ -19,6 +19,10 @@ class CustomerManager(ModelManagerMixin):
         return instance
 
 
+class CustomerOfferManager(ModelManagerMixin):
+    pass
+
+
 class Customer(MainInformationMixin, UserInformationMixin):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     balance = models.DecimalField(
@@ -32,3 +36,4 @@ class CustomerOffer(CarInformationMixin, MainInformationMixin):
     max_price = models.DecimalField(
         max_digits=10, decimal_places=2, validators=[MinValueValidator(0.00)]
     )
+    objects = CustomerOfferManager()

@@ -1,7 +1,7 @@
 from rest_framework import viewsets
 from drf_spectacular.utils import extend_schema
 
-from dealership.models import Dealership, DealershipCar
+from dealership.models import Dealership, DealershipCar, DealershipOffer
 from .serializer import (
     DealershipSerializer,
     DealershipCarSerializer,
@@ -20,7 +20,7 @@ class DealershipViewSet(viewsets.ModelViewSet):
         Dealership.objects.create_instance(**serializer.data)
 
     def perform_destroy(self, instance):
-        instance.soft_delete()
+        Dealership.objects.soft_delete(instance)
 
 
 @extend_schema(tags=["dealership_car/v1"])
@@ -39,7 +39,7 @@ class DealershipCarViewSet(viewsets.ModelViewSet):
         serializer.save()
 
     def perform_destroy(self, instance):
-        instance.soft_delete()
+        DealershipCar.objects.soft_delete(instance)
 
 
 @extend_schema(tags=["dealership_offer/v1"])
@@ -52,4 +52,4 @@ class DealershipOfferViewSet(viewsets.ModelViewSet):
         )
 
     def perform_destroy(self, instance):
-        instance.soft_delete()
+        DealershipOffer.objects.soft_delete(instance)

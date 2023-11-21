@@ -53,3 +53,55 @@ class TestCustomerViews:
         # Assert
         assert response.status_code == status.HTTP_204_NO_CONTENT
         assert Customer.objects.filter(id=customer.id, is_active=False).exists()
+
+
+@pytest.mark.django_db
+class TestCustomerOffer:
+    def test_get_customeroffer(self, api_client, user):
+        # Arrange
+        api_client.force_authenticate(user=user)
+        customer = G(Customer, user=user)
+        G(CustomerOffer, customer=customer)
+        url = reverse("customer_offer-list")
+
+        # Act
+        response = api_client.get(url)
+
+        # Assert
+        assert response.status_code == status.HTTP_200_OK
+        assert len(response.data) == 1
+
+    def test_create_offer(self, api_client, user):
+        # Arrange
+        api_client.force_authenticate(user=user)
+        G(Customer, user=user)
+        customer_offer_data = {
+            "mark": "Toyota",
+            "model": "Camry",
+            "max_price": 25000.00,
+            "count": 2,
+        }
+        url = reverse("customer_offer-list")
+
+        # Act
+        response = api_client.post(url, customer_offer_data, format="json")
+
+        # Assert
+        assert response.status_code == status.HTTP_201_CREATED
+        assert Customer.objects.filter(is_active=True).exists()
+
+    def test_delete_offer(self, api_client, user):
+        # Arrange
+        api_client.force_authenticate(user=user)
+        customer = G(Customer, user=user)
+        customer_offer = G(CustomerOffer, customer=customer)
+        delete_url = reverse("customer_offer-detail", args=[customer_offer.id])
+
+        # Act
+        response = api_client.delete(delete_url)
+
+        # Assert
+        assert response.status_code == status.HTTP_204_NO_CONTENT
+        assert CustomerOffer.objects.filter(
+            id=customer_offer.id, is_active=False
+        ).exists()

@@ -35,4 +35,4 @@ class CustomerOfferViewSet(viewsets.ModelViewSet):
         serializer.save()
 
     def perform_destroy(self, instance):
-        instance.soft_delete()
+        CustomerOffer.objects.soft_delete(instance)

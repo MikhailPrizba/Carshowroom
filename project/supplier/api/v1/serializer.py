@@ -23,22 +23,11 @@ class SupplierSerializer(serializers.ModelSerializer):
 
 
 class SupplierCarSerializer(serializers.ModelSerializer):
+    supplier = serializers.HiddenField(default=None)
+
     class Meta:
         model = SupplierCar
-        fields = (
-            "id",
-            "supplier",
-            "mark",
-            "model",
-            "car_type",
-            "color",
-            "description",
-            "price",
-            "count",
-            "is_active",
-            "created",
-            "updated",
-        )
+        fields = "__all__"
 
 
 class SupplierOfferSerializer(serializers.ModelSerializer):

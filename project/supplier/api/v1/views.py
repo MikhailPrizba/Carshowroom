@@ -15,7 +15,7 @@ class SupplierViewSet(viewsets.ModelViewSet):
         Supplier.objects.create_instance(**serializer.data)
 
     def perform_destroy(self, instance):
-        instance.soft_delete()
+        Supplier.objects.soft_delete(instance)
 
 
 @extend_schema(tags=["supplier_car/v1"])
@@ -34,4 +34,4 @@ class SupplierCarViewSet(viewsets.ModelViewSet):
         serializer.save()
 
     def perform_destroy(self, instance):
-        instance.soft_delete()
+        SupplierCar.objects.soft_delete(instance)
