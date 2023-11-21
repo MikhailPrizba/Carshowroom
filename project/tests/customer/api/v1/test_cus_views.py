@@ -57,10 +57,9 @@ class TestCustomerViews:
 
 @pytest.mark.django_db
 class TestCustomerOffer:
-    def test_get_customeroffer(self, api_client, user):
+    def test_get_customeroffer(self, api_client, customer):
         # Arrange
-        api_client.force_authenticate(user=user)
-        customer = G(Customer, user=user)
+
         G(CustomerOffer, customer=customer)
         url = reverse("customer_offer-list")
 
@@ -71,10 +70,8 @@ class TestCustomerOffer:
         assert response.status_code == status.HTTP_200_OK
         assert len(response.data) == 1
 
-    def test_create_offer(self, api_client, user):
+    def test_create_offer(self, api_client, customer):
         # Arrange
-        api_client.force_authenticate(user=user)
-        G(Customer, user=user)
         customer_offer_data = {
             "mark": "Toyota",
             "model": "Camry",
@@ -88,12 +85,10 @@ class TestCustomerOffer:
 
         # Assert
         assert response.status_code == status.HTTP_201_CREATED
-        assert Customer.objects.filter(is_active=True).exists()
+        assert CustomerOffer.objects.filter(is_active=True).exists()
 
-    def test_delete_offer(self, api_client, user):
+    def test_delete_offer(self, api_client, customer):
         # Arrange
-        api_client.force_authenticate(user=user)
-        customer = G(Customer, user=user)
         customer_offer = G(CustomerOffer, customer=customer)
         delete_url = reverse("customer_offer-detail", args=[customer_offer.id])
 

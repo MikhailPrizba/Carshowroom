@@ -8,8 +8,8 @@ from dealership.api.v1.views import (
 )
 
 router = routers.DefaultRouter()
-router.register(r"offer", DealershipOfferViewSet, basename="offer")
-router.register(r"cars", DealershipCarViewSet, basename="cars")
+router.register(r"offer", DealershipOfferViewSet, basename="dealership_offer")
+router.register(r"car", DealershipCarViewSet, basename="dealership_car")
 router.register(r"", DealershipViewSet, basename="dealership")
 
 

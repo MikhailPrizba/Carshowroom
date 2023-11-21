@@ -1,7 +1,7 @@
 import pytest
 from django.urls import reverse
 from rest_framework import status
-from supplier.models import Supplier
+from supplier.models import Supplier, SupplierCar
 from ddf import G
 
 
@@ -54,3 +54,48 @@ class TestSupplierViews:
         # Assert
         assert response.status_code == status.HTTP_204_NO_CONTENT
         assert Supplier.objects.filter(id=supplier.id, is_active=False).exists()
+
+
+@pytest.mark.django_db
+class TestSupplierCar:
+    def test_get_supplier_car(self, api_client, supplier):
+        # Arrange
+
+        G(SupplierCar, supplier=supplier)
+        url = reverse("supplier_car-list")
+
+        # Act
+        response = api_client.get(url)
+
+        # Assert
+        assert response.status_code == status.HTTP_200_OK
+        assert len(response.data) == 1
+
+    def test_create_supplier_car(self, api_client, supplier):
+        # Arrange
+        supplier_car_data = {
+            "mark": "Toyota",
+            "model": "Camry",
+            "price": 25000.00,
+            "count": 2,
+        }
+        url = reverse("supplier_car-list")
+
+        # Act
+        response = api_client.post(url, supplier_car_data, format="json")
+
+        # Assert
+        assert response.status_code == status.HTTP_201_CREATED
+        assert SupplierCar.objects.filter(is_active=True).exists()
+
+    def test_delete_supplier_car(self, api_client, supplier):
+        # Arrange
+        supplier_car = G(SupplierCar, supplier=supplier)
+        delete_url = reverse("supplier_car-detail", args=[supplier_car.id])
+
+        # Act
+        response = api_client.delete(delete_url)
+
+        # Assert
+        assert response.status_code == status.HTTP_204_NO_CONTENT
+        assert SupplierCar.objects.filter(id=supplier_car.id, is_active=False).exists()

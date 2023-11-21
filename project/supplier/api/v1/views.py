@@ -23,12 +23,12 @@ class SupplierCarViewSet(viewsets.ModelViewSet):
     serializer_class = SupplierCarSerializer
 
     def get_queryset(self):
-        return Supplier.objects.filter(
+        return SupplierCar.objects.filter(
             supplier__user=self.request.user.pk, is_active=True
         )
 
     def perform_create(self, serializer):
-        serializer.validated_data["dealership"] = SupplierCar.objects.get(
+        serializer.validated_data["supplier"] = Supplier.objects.get(
             user=self.request.user
         )
         serializer.save()
