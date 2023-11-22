@@ -12,7 +12,7 @@ from rest_framework.permissions import IsAuthenticated
 class CustomerViewSet(viewsets.ModelViewSet):
     serializer_class = CustomerSerializer
     permission_classes = [IsAuthenticated, UpdatePermission]
-    queryset = CustomQuerySet(model=Customer)
+    queryset = CustomQuerySet(model=Customer).get_is_active()
 
     def perform_create(self, serializer):
         Customer.objects.create_instance(**serializer.data)

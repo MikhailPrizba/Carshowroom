@@ -49,7 +49,6 @@ class TestCustomerViews:
 
         # Act
         response = api_client.delete(delete_url)
-
         # Assert
         assert response.status_code == status.HTTP_204_NO_CONTENT
         assert not Customer.objects.filter(id=customer.id, is_active=True).exists()
