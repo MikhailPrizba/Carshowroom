@@ -3,7 +3,7 @@ from rest_framework import serializers
 
 class CarSerializer(serializers.ModelSerializer):
     class Meta:
-        car_fields = [
+        fields = [
             "id",
             "mark",
             "model",

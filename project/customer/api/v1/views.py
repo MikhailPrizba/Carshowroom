@@ -1,6 +1,7 @@
 from rest_framework import viewsets
 from drf_spectacular.utils import extend_schema
 
+from common.models import CustomQuerySet
 from customer.models import Customer, CustomerOffer
 from .serializer import CustomerSerializer, CustomerOfferSerializer
 from .permissions import UpdatePermission, IsCustomerOrSuperUser
@@ -11,9 +12,7 @@ from rest_framework.permissions import IsAuthenticated
 class CustomerViewSet(viewsets.ModelViewSet):
     serializer_class = CustomerSerializer
     permission_classes = [IsAuthenticated, UpdatePermission]
-
-    def get_queryset(self):
-        return Customer.objects.filter(is_active=True)
+    queryset = CustomQuerySet(model=Customer)
 
     def perform_create(self, serializer):
         Customer.objects.create_instance(**serializer.data)

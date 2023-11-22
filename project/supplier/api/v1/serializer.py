@@ -1,4 +1,5 @@
 from rest_framework import serializers
+from common.serializer import CarSerializer
 from supplier.models import Supplier, SupplierCar, SupplierOffer
 from user.api.v1.serializer import UserSerializer
 
@@ -27,7 +28,7 @@ class SupplierCarSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = SupplierCar
-        fields = "__all__"
+        fields = CarSerializer.Meta.fields + ["supplier", "price", "count"]
 
 
 class SupplierOfferSerializer(serializers.ModelSerializer):

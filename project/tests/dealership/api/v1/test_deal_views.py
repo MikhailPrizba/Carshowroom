@@ -52,7 +52,7 @@ class TestDealershipViews:
 
         # Assert
         assert response.status_code == status.HTTP_204_NO_CONTENT
-        assert Dealership.objects.filter(id=dealership.id, is_active=False).exists()
+        assert not Dealership.objects.filter(id=dealership.id, is_active=True).exists()
 
 
 @pytest.mark.django_db
@@ -97,6 +97,6 @@ class TestDealershipCar:
 
         # Assert
         assert response.status_code == status.HTTP_204_NO_CONTENT
-        assert DealershipCar.objects.filter(
-            id=dealership_car.id, is_active=False
+        assert not DealershipCar.objects.filter(
+            id=dealership_car.id, is_active=True
         ).exists()

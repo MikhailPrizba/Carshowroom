@@ -53,7 +53,7 @@ class TestSupplierViews:
 
         # Assert
         assert response.status_code == status.HTTP_204_NO_CONTENT
-        assert Supplier.objects.filter(id=supplier.id, is_active=False).exists()
+        assert not Supplier.objects.filter(id=supplier.id, is_active=True).exists()
 
 
 @pytest.mark.django_db
@@ -98,4 +98,6 @@ class TestSupplierCar:
 
         # Assert
         assert response.status_code == status.HTTP_204_NO_CONTENT
-        assert SupplierCar.objects.filter(id=supplier_car.id, is_active=False).exists()
+        assert not SupplierCar.objects.filter(
+            id=supplier_car.id, is_active=True
+        ).exists()

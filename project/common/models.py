@@ -1,5 +1,6 @@
 from django.core.validators import RegexValidator
 from django.db import models
+from django.db.models.query import QuerySet
 from django.utils.translation import gettext_lazy as _
 from django_countries import fields
 from django_enum import TextChoices
@@ -76,3 +77,8 @@ class ModelManagerMixin(models.Manager):
     def soft_delete(self, instance):
         instance.is_active = False
         instance.save()
+
+
+class CustomQuerySet(models.QuerySet):
+    def get_is_active(self):
+        return self.filter(is_active=True)
