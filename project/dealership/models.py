@@ -3,6 +3,7 @@ from common.models import (
     MainInformationMixin,
     UserInformationMixin,
     ModelManagerMixin,
+    CustomQuerySetMixin,
 )
 from customer.models import Customer
 from django.core.validators import MinValueValidator
@@ -20,11 +21,23 @@ class DealershipManager(ModelManagerMixin):
         return instance
 
 
+class DealershipQuerySet(CustomQuerySetMixin):
+    pass
+
+
 class DealershipCarManager(ModelManagerMixin):
     pass
 
 
+class DealershipCarQuerySet(CustomQuerySetMixin):
+    pass
+
+
 class DealershipOfferManager(ModelManagerMixin):
+    pass
+
+
+class DealershipOfferQuerySet(CustomQuerySetMixin):
     pass
 
 
@@ -33,7 +46,7 @@ class Dealership(MainInformationMixin, UserInformationMixin):
     balance = models.DecimalField(
         default=0, max_digits=12, decimal_places=2, validators=[MinValueValidator(0.00)]
     )
-    objects = DealershipManager()
+    objects = DealershipManager().from_queryset(DealershipQuerySet)()
 
 
 class DealershipCar(MainInformationMixin, CarInformationMixin):
@@ -42,7 +55,7 @@ class DealershipCar(MainInformationMixin, CarInformationMixin):
         default=0, max_digits=12, decimal_places=2, validators=[MinValueValidator(0.00)]
     )
     count = models.IntegerField(default=1, validators=[MinValueValidator(0)])
-    objects = DealershipCarManager()
+    objects = DealershipCarManager().from_queryset(DealershipCarQuerySet)()
 
 
 class DealershipOffer(MainInformationMixin):
@@ -52,4 +65,4 @@ class DealershipOffer(MainInformationMixin):
         max_digits=10, decimal_places=2, validators=[MinValueValidator(0.00)]
     )
     paid = models.BooleanField(default=False)
-    objects = DealershipOfferManager()
+    objects = DealershipOfferManager().from_queryset(DealershipOfferQuerySet)()

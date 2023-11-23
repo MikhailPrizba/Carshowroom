@@ -7,12 +7,19 @@ from .serializer import (
     DealershipCarSerializer,
     DealershipOfferSerializer,
 )
+from .permissions import UpdatePermission, IsDealershipOrSuperUser
+from rest_framework.permissions import IsAuthenticated
 
 
 @extend_schema(tags=["dealership/v1"])
 class DealershipViewSet(viewsets.ModelViewSet):
     serializer_class = DealershipSerializer
     queryset = Dealership.objects.get_is_active()
+    permission_classes = [IsAuthenticated]
+    permission_classes_by_action = {
+        "update": [UpdatePermission],
+        "partial_update": [UpdatePermission],
+    }
 
     def perform_create(self, serializer):
         Dealership.objects.create_instance(**serializer.data)
@@ -24,10 +31,11 @@ class DealershipViewSet(viewsets.ModelViewSet):
 @extend_schema(tags=["dealership_car/v1"])
 class DealershipCarViewSet(viewsets.ModelViewSet):
     serializer_class = DealershipCarSerializer
+    permission_classes = [IsAuthenticated, IsDealershipOrSuperUser]
 
     def get_queryset(self):
-        return DealershipCar.objects.filter(
-            dealership__user=self.request.user.pk, is_active=True
+        return DealershipCar.objects.get_is_active().filter(
+            dealership__user=self.request.user.pk
         )
 
     def perform_create(self, serializer):
@@ -45,8 +53,8 @@ class DealershipOfferViewSet(viewsets.ModelViewSet):
     serializer_class = DealershipOfferSerializer
 
     def get_queryset(self):
-        return DealershipOfferSerializer.objects.filter(
-            dealership__user=self.request.user.pk, is_active=True
+        return DealershipOfferSerializer.objects.get_is_active().filter(
+            dealership__user=self.request.user.pk
         )
 
     def perform_destroy(self, instance):

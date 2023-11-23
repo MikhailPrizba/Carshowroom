@@ -5,6 +5,7 @@ from common.models import (
     MainInformationMixin,
     UserInformationMixin,
     ModelManagerMixin,
+    CustomQuerySetMixin,
 )
 from dealership.models import Dealership
 from django.core.validators import MaxValueValidator, MinValueValidator
@@ -22,11 +23,23 @@ class SupplierManager(ModelManagerMixin):
         return instance
 
 
+class SupplierQuerySet(CustomQuerySetMixin):
+    pass
+
+
 class SupplierCarManager(ModelManagerMixin):
     pass
 
 
+class SupplierCarQuerySet(CustomQuerySetMixin):
+    pass
+
+
 class SupplierOfferManager(ModelManagerMixin):
+    pass
+
+
+class SupplierOfferQuerySet(CustomQuerySetMixin):
     pass
 
 
@@ -41,7 +54,7 @@ class Supplier(MainInformationMixin, UserInformationMixin):
     balance = models.DecimalField(
         default=0, max_digits=15, decimal_places=2, validators=[MinValueValidator(0.00)]
     )
-    objects = SupplierManager()
+    objects = SupplierManager().from_queryset(SupplierQuerySet)()
 
 
 class SupplierCar(MainInformationMixin, CarInformationMixin):
@@ -50,7 +63,7 @@ class SupplierCar(MainInformationMixin, CarInformationMixin):
         max_digits=12, decimal_places=2, validators=[MinValueValidator(0.00)]
     )
     count = models.IntegerField(default=1, validators=[MinValueValidator(0)])
-    objects = SupplierCarManager()
+    objects = SupplierCarManager().from_queryset(SupplierCarQuerySet)()
 
 
 class SupplierOffer(MainInformationMixin):
@@ -60,4 +73,4 @@ class SupplierOffer(MainInformationMixin):
         max_digits=10, decimal_places=2, validators=[MinValueValidator(0.00)]
     )
     paid = models.BooleanField(default=False)
-    objects = SupplierOfferManager()
+    objects = SupplierOfferManager().from_queryset(SupplierOfferQuerySet)()

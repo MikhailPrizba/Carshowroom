@@ -55,7 +55,7 @@ class TestCustomerViews:
 
 @pytest.mark.django_db
 class TestCustomerOffer:
-    def test_get_customeroffer(self, customer_client, customer):
+    def test_get_customer_offer(self, customer_client, customer):
         # Arrange
 
         G(CustomerOffer, customer=customer)

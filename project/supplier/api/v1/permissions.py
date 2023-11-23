@@ -12,11 +12,11 @@ class UpdatePermission(permissions.BasePermission):
         return False
 
 
-class IsCustomerOrSuperUser(permissions.BasePermission):
+class IsDealershipOrSuperUser(permissions.BasePermission):
     def has_permission(self, request, view):
         if (
             request.user.is_superuser
-            or request.user.user_role == User.UserRoleChoices.CUSTOMER
+            or request.user.user_role == User.UserRoleChoices.SUPPLIER
         ):
             return True
         return False
