@@ -92,7 +92,6 @@ class TestCustomerOffer:
     def test_get_customer_offer(
         self,
         customer_client: APIClient,
-        customer: Customer,
         url: str,
         customer_offer: CustomerOffer,
     ):
@@ -118,7 +117,6 @@ class TestCustomerOffer:
     def test_delete_offer(
         self,
         customer_client: APIClient,
-        customer: Customer,
         url_detail: str,
         customer_offer: CustomerOffer,
     ):
