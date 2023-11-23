@@ -50,6 +50,11 @@ class CarInformationMixin(models.Model):
         abstract = True
 
 
+class CustomQuerySet(models.QuerySet):
+    def get_is_active(self):
+        return self.filter(is_active=True)
+
+
 class ModelManagerMixin(models.Manager):
     """
     A mixin for managing generic models.
@@ -67,6 +72,9 @@ class ModelManagerMixin(models.Manager):
         Returns the updated instance.
     """
 
+    def get_queryset(self):
+        return CustomQuerySet(self.model, using=self._db)
+
     def create_instance(self, **kwargs) -> models.Model:
         return self.create(**kwargs)
 
@@ -74,11 +82,9 @@ class ModelManagerMixin(models.Manager):
         self.filter(id=id).update(**kwargs)
         return self.get(id=id)
 
+    def get_is_active(self):
+        return self.get_queryset().get_is_active()
+
     def soft_delete(self, instance):
         instance.is_active = False
         instance.save()
-
-
-class CustomQuerySet(models.QuerySet):
-    def get_is_active(self):
-        return self.filter(is_active=True)

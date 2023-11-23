@@ -7,19 +7,18 @@ from ddf import G
 
 @pytest.mark.django_db
 class TestDealershipViews:
-    def test_get_dealership(self, api_client):
+    def test_get_dealership(self, dealership_client):
         # Arrange
-        G(Dealership)
         url = reverse("dealership-list")
 
         # Act
-        response = api_client.get(url)
+        response = dealership_client.get(url)
 
         # Assert
         assert response.status_code == status.HTTP_200_OK
         assert len(response.data) == 1
 
-    def test_create_dealership(self, api_client):
+    def test_create_dealership(self, dealership_client):
         # Arrange
         dealership_data = {
             "user": {
@@ -36,19 +35,18 @@ class TestDealershipViews:
         url = reverse("dealership-list")
 
         # Act
-        response = api_client.post(url, dealership_data, format="json")
+        response = dealership_client.post(url, dealership_data, format="json")
 
         # Assert
         assert response.status_code == status.HTTP_201_CREATED
         assert Dealership.objects.filter(is_active=True).exists()
 
-    def test_delete_dealership(self, api_client):
+    def test_delete_dealership(self, dealership_client, dealership):
         # Arrange
-        dealership = G(Dealership)
         delete_url = reverse("dealership-detail", args=[dealership.id])
 
         # Act
-        response = api_client.delete(delete_url)
+        response = dealership_client.delete(delete_url)
 
         # Assert
         assert response.status_code == status.HTTP_204_NO_CONTENT
@@ -57,20 +55,20 @@ class TestDealershipViews:
 
 @pytest.mark.django_db
 class TestDealershipCar:
-    def test_get_dealership_car(self, api_client, dealership):
+    def test_get_dealership_car(self, dealership_client, dealership):
         # Arrange
 
         G(DealershipCar, dealership=dealership)
         url = reverse("dealership_car-list")
 
         # Act
-        response = api_client.get(url)
+        response = dealership_client.get(url)
 
         # Assert
         assert response.status_code == status.HTTP_200_OK
         assert len(response.data) == 1
 
-    def test_create_dealership_car(self, api_client, dealership):
+    def test_create_dealership_car(self, dealership_client):
         # Arrange
         dealership_car_data = {
             "mark": "Toyota",
@@ -81,19 +79,19 @@ class TestDealershipCar:
         url = reverse("dealership_car-list")
 
         # Act
-        response = api_client.post(url, dealership_car_data, format="json")
+        response = dealership_client.post(url, dealership_car_data, format="json")
 
         # Assert
         assert response.status_code == status.HTTP_201_CREATED
         assert DealershipCar.objects.filter(is_active=True).exists()
 
-    def test_delete_dealership_car(self, api_client, dealership):
+    def test_delete_dealership_car(self, dealership_client, dealership):
         # Arrange
         dealership_car = G(DealershipCar, dealership=dealership)
         delete_url = reverse("dealership_car-detail", args=[dealership_car.id])
 
         # Act
-        response = api_client.delete(delete_url)
+        response = dealership_client.delete(delete_url)
 
         # Assert
         assert response.status_code == status.HTTP_204_NO_CONTENT

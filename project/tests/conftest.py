@@ -7,12 +7,6 @@ from supplier.models import Supplier
 from ddf import G
 
 
-@pytest.fixture
-def user():
-    return User.objects.create(username="test_user", password="test_password")
-
-
-@pytest.fixture
 def api_client(user):
     client = APIClient()
     client.force_authenticate(user=user)
@@ -20,21 +14,36 @@ def api_client(user):
 
 
 @pytest.fixture
-def customer(user):
-    user.user_role = "CUSTOMER"
-    customer = G(Customer, user=user)
-    return customer
+def customer():
+    user = G(User, user_role=User.UserRoleChoices.CUSTOMER)
+    instance = G(Customer, user=user)
+    return instance
 
 
 @pytest.fixture
-def dealership(user):
-    user.user_role = "DEALERSHIP"
-    dealership = G(Dealership, user=user)
-    return dealership
+def customer_client(customer):
+    return api_client(customer.user)
 
 
 @pytest.fixture
-def supplier(user):
-    user.user_role = "SUPPLIER"
-    supplier = G(Supplier, user=user)
-    return supplier
+def dealership():
+    user = G(User, user_role=User.UserRoleChoices.DEALERSHIP)
+    instance = G(Dealership, user=user)
+    return instance
+
+
+@pytest.fixture
+def dealership_client(dealership):
+    return api_client(dealership.user)
+
+
+@pytest.fixture
+def supplier():
+    user = G(User, user_role=User.UserRoleChoices.SUPPLIER)
+    instance = G(Supplier, user=user)
+    return instance
+
+
+@pytest.fixture
+def supplier_client(supplier):
+    return api_client(supplier.user)

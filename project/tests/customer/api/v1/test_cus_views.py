@@ -7,19 +7,18 @@ from ddf import G
 
 @pytest.mark.django_db
 class TestCustomerViews:
-    def test_get_customer(self, api_client):
+    def test_get_customer(self, customer_client):
         # Arrange
-        G(Customer)
         url = reverse("customer-list")
 
         # Act
-        response = api_client.get(url)
+        response = customer_client.get(url)
 
         # Assert
         assert response.status_code == status.HTTP_200_OK
         assert len(response.data) == 1
 
-    def test_create_customer(self, api_client):
+    def test_create_customer(self, customer_client):
         # Arrange
         customer_data = {
             "user": {
@@ -36,19 +35,19 @@ class TestCustomerViews:
         url = reverse("customer-list")
 
         # Act
-        response = api_client.post(url, customer_data, format="json")
+        response = customer_client.post(url, customer_data, format="json")
 
         # Assert
         assert response.status_code == status.HTTP_201_CREATED
         assert Customer.objects.filter(is_active=True).exists()
 
-    def test_delete_customer(self, api_client):
+    def test_delete_customer(self, customer_client, customer):
         # Arrange
-        customer = G(Customer)
         delete_url = reverse("customer-detail", args=[customer.id])
 
         # Act
-        response = api_client.delete(delete_url)
+        response = customer_client.delete(delete_url)
+
         # Assert
         assert response.status_code == status.HTTP_204_NO_CONTENT
         assert not Customer.objects.filter(id=customer.id, is_active=True).exists()
@@ -56,20 +55,20 @@ class TestCustomerViews:
 
 @pytest.mark.django_db
 class TestCustomerOffer:
-    def test_get_customeroffer(self, api_client, customer):
+    def test_get_customeroffer(self, customer_client, customer):
         # Arrange
 
         G(CustomerOffer, customer=customer)
         url = reverse("customer_offer-list")
 
         # Act
-        response = api_client.get(url)
+        response = customer_client.get(url)
 
         # Assert
         assert response.status_code == status.HTTP_200_OK
         assert len(response.data) == 1
 
-    def test_create_offer(self, api_client, customer):
+    def test_create_offer(self, customer_client):
         # Arrange
         customer_offer_data = {
             "mark": "Toyota",
@@ -80,19 +79,19 @@ class TestCustomerOffer:
         url = reverse("customer_offer-list")
 
         # Act
-        response = api_client.post(url, customer_offer_data, format="json")
+        response = customer_client.post(url, customer_offer_data, format="json")
 
         # Assert
         assert response.status_code == status.HTTP_201_CREATED
         assert CustomerOffer.objects.filter(is_active=True).exists()
 
-    def test_delete_offer(self, api_client, customer):
+    def test_delete_offer(self, customer_client, customer):
         # Arrange
         customer_offer = G(CustomerOffer, customer=customer)
         delete_url = reverse("customer_offer-detail", args=[customer_offer.id])
 
         # Act
-        response = api_client.delete(delete_url)
+        response = customer_client.delete(delete_url)
 
         # Assert
         assert response.status_code == status.HTTP_204_NO_CONTENT
