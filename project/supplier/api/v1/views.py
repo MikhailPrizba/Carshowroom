@@ -7,9 +7,7 @@ from .serializer import SupplierSerializer, SupplierCarSerializer
 @extend_schema(tags=["supplier/v1"])
 class SupplierViewSet(viewsets.ModelViewSet):
     serializer_class = SupplierSerializer
-
-    def get_queryset(self):
-        return Supplier.objects.filter(is_active=True)
+    queryset = Supplier.objects.get_is_active()
 
     def perform_create(self, serializer):
         Supplier.objects.create_instance(**serializer.data)

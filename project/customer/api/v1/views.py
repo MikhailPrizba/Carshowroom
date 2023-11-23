@@ -11,8 +11,12 @@ from rest_framework.permissions import IsAuthenticated
 @extend_schema(tags=["customer/v1"])
 class CustomerViewSet(viewsets.ModelViewSet):
     serializer_class = CustomerSerializer
-    permission_classes = [IsAuthenticated, UpdatePermission]
     queryset = Customer.objects.get_is_active()
+    permission_classes = [IsAuthenticated]
+    permission_classes_by_action = {
+        "update": [UpdatePermission],
+        "partial_update": [UpdatePermission],
+    }
 
     def perform_create(self, serializer):
         Customer.objects.create_instance(**serializer.data)
@@ -27,8 +31,8 @@ class CustomerOfferViewSet(viewsets.ModelViewSet):
     permission_classes = [IsAuthenticated, IsCustomerOrSuperUser]
 
     def get_queryset(self):
-        return CustomerOffer.objects.filter(
-            customer__user=self.request.user.pk, is_active=True
+        return CustomerOffer.objects.get_is_active().filter(
+            customer__user=self.request.user.pk
         )
 
     def perform_create(self, serializer):

@@ -12,9 +12,7 @@ from .serializer import (
 @extend_schema(tags=["dealership/v1"])
 class DealershipViewSet(viewsets.ModelViewSet):
     serializer_class = DealershipSerializer
-
-    def get_queryset(self):
-        return Dealership.objects.filter(is_active=True)
+    queryset = Dealership.objects.get_is_active()
 
     def perform_create(self, serializer):
         Dealership.objects.create_instance(**serializer.data)
