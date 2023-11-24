@@ -1,8 +1,12 @@
 from rest_framework import serializers
+from common.serializer import CarSerializer
 from supplier.models import Supplier, SupplierCar, SupplierOffer
+from user.api.v1.serializer import UserSerializer
 
 
 class SupplierSerializer(serializers.ModelSerializer):
+    user = UserSerializer()
+
     class Meta:
         model = Supplier
         fields = (
@@ -20,22 +24,11 @@ class SupplierSerializer(serializers.ModelSerializer):
 
 
 class SupplierCarSerializer(serializers.ModelSerializer):
+    supplier = serializers.HiddenField(default=None)
+
     class Meta:
         model = SupplierCar
-        fields = (
-            "id",
-            "supplier",
-            "mark",
-            "model",
-            "car_type",
-            "color",
-            "description",
-            "price",
-            "count",
-            "is_active",
-            "created",
-            "updated",
-        )
+        fields = CarSerializer.Meta.fields + ["supplier", "price", "count"]
 
 
 class SupplierOfferSerializer(serializers.ModelSerializer):

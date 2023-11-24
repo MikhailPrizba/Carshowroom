@@ -1,8 +1,12 @@
 from rest_framework import serializers
 from dealership.models import Dealership, DealershipCar, DealershipOffer
+from common.serializer import CarSerializer
+from user.api.v1.serializer import UserSerializer
 
 
 class DealershipSerializer(serializers.ModelSerializer):
+    user = UserSerializer()
+
     class Meta:
         model = Dealership
         fields = (
@@ -19,22 +23,11 @@ class DealershipSerializer(serializers.ModelSerializer):
 
 
 class DealershipCarSerializer(serializers.ModelSerializer):
+    dealership = serializers.HiddenField(default=None)
+
     class Meta:
         model = DealershipCar
-        fields = (
-            "id",
-            "dealership",
-            "mark",
-            "model",
-            "car_type",
-            "color",
-            "description",
-            "price",
-            "count",
-            "is_active",
-            "created",
-            "updated",
-        )
+        fields = CarSerializer.Meta.fields + ["dealership", "price", "count"]
 
 
 class DealershipOfferSerializer(serializers.ModelSerializer):

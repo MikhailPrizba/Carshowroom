@@ -1,12 +1,14 @@
 from django.core.validators import RegexValidator
 from django.db import models
+from django.db.models.query import QuerySet
 from django.utils.translation import gettext_lazy as _
 from django_countries import fields
 from django_enum import TextChoices
-from user.models import User
+import uuid
 
 
 class MainInformationMixin(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     is_active = models.BooleanField(default=True)
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
@@ -48,6 +50,11 @@ class CarInformationMixin(models.Model):
         abstract = True
 
 
+class CustomQuerySetMixin(models.QuerySet):
+    def get_is_active(self):
+        return self.filter(is_active=True)
+
+
 class ModelManagerMixin(models.Manager):
     """
     A mixin for managing generic models.
@@ -71,3 +78,7 @@ class ModelManagerMixin(models.Manager):
     def update_instance(self, id: int, **kwargs) -> models.Model:
         self.filter(id=id).update(**kwargs)
         return self.get(id=id)
+
+    def soft_delete(self, instance):
+        instance.is_active = False
+        instance.save()
