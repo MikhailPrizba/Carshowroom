@@ -6,9 +6,9 @@ from ddf import G
 
 @pytest.mark.django_db
 class TestSupplierModel:
-    def test_supplier_creation(self):
-        # ARRANGE
-        supplier_data = {
+    @pytest.fixture
+    def supplier_data(self):
+        data = {
             "user": {
                 "username": "supplier",
                 "email": "supplier@email.com",
@@ -18,6 +18,10 @@ class TestSupplierModel:
             "foundation_year": 2000,
             "balance": 100,
         }
+        return data
+
+    def test_supplier_creation(self, supplier_data):
+        # ARRANGE
 
         # ACT
         supplier = Supplier.objects.create_instance(**supplier_data)
@@ -29,10 +33,8 @@ class TestSupplierModel:
         assert supplier.foundation_year == supplier_data["foundation_year"]
         assert supplier.balance == supplier_data["balance"]
 
-    def test_supplier_update(self):
+    def test_supplier_update(self, supplier):
         # ARRANGE
-        supplier = G(Supplier)
-
         # ACT
         updated_supplier = Supplier.objects.update_instance(
             id=supplier.id, phone_number="+9876543210"
@@ -44,10 +46,8 @@ class TestSupplierModel:
 
 @pytest.mark.django_db
 class TestSupplierCarModel:
-    def test_supplier_car_creation(self):
+    def test_supplier_car_creation(self, supplier):
         # ARRANGE
-        supplier = G(Supplier)
-
         # ACT
         supplier_car = SupplierCar.objects.create_instance(
             supplier=supplier, mark="Toyota", model="Camry", price=25000.00, count=2
@@ -75,10 +75,8 @@ class TestSupplierCarModel:
 
 @pytest.mark.django_db
 class TestSupplierOfferModel:
-    def test_supplier_offer_creation(self):
+    def test_supplier_offer_creation(self, supplier, dealership):
         # ARRANGE
-        supplier = G(Supplier)
-        dealership = G(Dealership)
         supplier_offer_data = {
             "supplier": supplier,
             "dealership": dealership,

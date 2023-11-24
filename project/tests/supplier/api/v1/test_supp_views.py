@@ -7,20 +7,9 @@ from ddf import G
 
 @pytest.mark.django_db
 class TestSupplierViews:
-    def test_get_supplier(self, supplier_client):
-        # Arrange
-        url = reverse("supplier-list")
-
-        # Act
-        response = supplier_client.get(url)
-
-        # Assert
-        assert response.status_code == status.HTTP_200_OK
-        assert len(response.data) == 1
-
-    def test_create_supplier(self, supplier_client):
-        # Arrange
-        supplier_data = {
+    @pytest.fixture
+    def supplier_data(self):
+        data = {
             "user": {
                 "username": "supplier",
                 "email": "supplier@email.com",
@@ -33,8 +22,27 @@ class TestSupplierViews:
             "email_confirm": True,
             "is_active": True,
         }
-        url = reverse("supplier-list")
+        return data
 
+    @pytest.fixture
+    def url(self):
+        return reverse("supplier-list")
+
+    @pytest.fixture
+    def url_detail(self, supplier):
+        return reverse("supplier-detail", args=[supplier.id])
+
+    def test_get_supplier(self, supplier_client, url):
+        # Arrange
+        # Act
+        response = supplier_client.get(url)
+
+        # Assert
+        assert response.status_code == status.HTTP_200_OK
+        assert len(response.data) == 1
+
+    def test_create_supplier(self, supplier_client, url, supplier_data):
+        # Arrange
         # Act
         response = supplier_client.post(url, supplier_data, format="json")
 
@@ -42,12 +50,10 @@ class TestSupplierViews:
         assert response.status_code == status.HTTP_201_CREATED
         assert Supplier.objects.filter(is_active=True).exists()
 
-    def test_delete_supplier(self, supplier_client, supplier):
+    def test_delete_supplier(self, supplier_client, supplier, url_detail):
         # Arrange
-        delete_url = reverse("supplier-detail", args=[supplier.id])
-
         # Act
-        response = supplier_client.delete(delete_url)
+        response = supplier_client.delete(url_detail)
 
         # Assert
         assert response.status_code == status.HTTP_204_NO_CONTENT
@@ -56,12 +62,20 @@ class TestSupplierViews:
 
 @pytest.mark.django_db
 class TestSupplierCar:
-    def test_get_supplier_car(self, supplier_client, supplier):
+    @pytest.fixture
+    def supplier_car(self, supplier):
+        return G(SupplierCar, supplier=supplier)
+
+    @pytest.fixture
+    def url(self):
+        return reverse("supplier_car-list")
+
+    @pytest.fixture
+    def url_detail(self, supplier_car):
+        return reverse("supplier_car-detail", args=[supplier_car.id])
+
+    def test_get_supplier_car(self, supplier_client, supplier_car, url):
         # Arrange
-
-        G(SupplierCar, supplier=supplier)
-        url = reverse("supplier_car-list")
-
         # Act
         response = supplier_client.get(url)
 
@@ -69,7 +83,7 @@ class TestSupplierCar:
         assert response.status_code == status.HTTP_200_OK
         assert len(response.data) == 1
 
-    def test_create_supplier_car(self, supplier_client, supplier):
+    def test_create_supplier_car(self, supplier_client, url):
         # Arrange
         supplier_car_data = {
             "mark": "Toyota",
@@ -77,8 +91,6 @@ class TestSupplierCar:
             "price": 25000.00,
             "count": 2,
         }
-        url = reverse("supplier_car-list")
-
         # Act
         response = supplier_client.post(url, supplier_car_data, format="json")
 
@@ -86,13 +98,10 @@ class TestSupplierCar:
         assert response.status_code == status.HTTP_201_CREATED
         assert SupplierCar.objects.filter(is_active=True).exists()
 
-    def test_delete_supplier_car(self, supplier_client, supplier):
+    def test_delete_supplier_car(self, supplier_client, supplier_car, url_detail):
         # Arrange
-        supplier_car = G(SupplierCar, supplier=supplier)
-        delete_url = reverse("supplier_car-detail", args=[supplier_car.id])
-
         # Act
-        response = supplier_client.delete(delete_url)
+        response = supplier_client.delete(url_detail)
 
         # Assert
         assert response.status_code == status.HTTP_204_NO_CONTENT
