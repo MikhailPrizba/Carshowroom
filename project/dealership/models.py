@@ -1,3 +1,4 @@
+import datetime
 from common.models import (
     CarInformationMixin,
     MainInformationMixin,
@@ -26,7 +27,19 @@ class DealershipQuerySet(CustomQuerySetMixin):
 
 
 class DealershipCarManager(ModelManagerMixin):
-    pass
+    def buy(self, instance, price):
+        instance.update = datetime.datetime.now()
+        instance.count += 1
+        instance.dealership.balance -= price
+        instance.dealership.save()
+        instance.save()
+
+    def sell(self, instance, price):
+        instance.update = datetime.datetime.now()
+        instance.count -= 1
+        instance.dealership.balance += price
+        instance.dealership.save()
+        instance.save()
 
 
 class DealershipCarQuerySet(CustomQuerySetMixin):
