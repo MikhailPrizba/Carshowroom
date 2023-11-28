@@ -29,7 +29,6 @@ class SupplierQuerySet(CustomQuerySetMixin):
 
 class SupplierCarManager(ModelManagerMixin):
     def sell(self, instance):
-        instance.update = datetime.datetime.now()
         instance.count -= 1
         instance.save()
 

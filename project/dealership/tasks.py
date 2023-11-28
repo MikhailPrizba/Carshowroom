@@ -1,20 +1,16 @@
-import datetime
 from celery import shared_task
 from dealership.models import Dealership, DealershipCar
 from supplier.models import Supplier, SupplierCar, SupplierOffer
-from django.db import connection
 from django.db import transaction
 
 
 @shared_task
 def buy_car():
-    dealership_cars = (
-        DealershipCar.objects.get_is_active()
-        .filter(dealership__is_active=True)
-        .select_related("dealership")
+    dealership_cars = DealershipCar.objects.get_is_active().filter(
+        dealership__is_active=True
     )
     supplier_active_cars = SupplierCar.objects.get_is_active()
-    for dealership_car in dealership_cars:
+    for dealership_car in dealership_cars.iterator():
         supplier_cars = supplier_active_cars.filter(
             mark=dealership_car.mark,
             model=dealership_car.model,
@@ -31,4 +27,3 @@ def buy_car():
             with transaction.atomic():
                 SupplierCar.objects.sell(supplier_car)
                 DealershipCar.objects.buy(dealership_car, supplier_car.price)
-    print(f"Количество выполненных запросов: {len(connection.queries)}")
