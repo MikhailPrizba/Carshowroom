@@ -28,7 +28,9 @@ class SupplierQuerySet(CustomQuerySetMixin):
 
 
 class SupplierCarManager(ModelManagerMixin):
-    pass
+    def sell(self, instance):
+        instance.count -= 1
+        instance.save()
 
 
 class SupplierCarQuerySet(CustomQuerySetMixin):

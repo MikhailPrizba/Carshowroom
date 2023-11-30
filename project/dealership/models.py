@@ -26,7 +26,17 @@ class DealershipQuerySet(CustomQuerySetMixin):
 
 
 class DealershipCarManager(ModelManagerMixin):
-    pass
+    def buy(self, instance, price):
+        instance.count += 1
+        instance.dealership.balance -= price
+        instance.dealership.save()
+        instance.save()
+
+    def sell(self, instance, price):
+        instance.count -= 1
+        instance.dealership.balance += price
+        instance.dealership.save()
+        instance.save()
 
 
 class DealershipCarQuerySet(CustomQuerySetMixin):
