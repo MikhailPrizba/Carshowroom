@@ -19,6 +19,10 @@ class CustomerManager(ModelManagerMixin):
         instance = super().create_instance(**kwargs)
         return instance
 
+    def buy(self, instance, price):
+        instance.balance -= price
+        instance.save()
+
 
 class CustomerQuerySet(CustomQuerySetMixin):
     pass
