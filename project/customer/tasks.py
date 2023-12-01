@@ -9,7 +9,6 @@ def buy_car(customer_offer_id):
     dealership__active_cars = DealershipCar.objects.get_is_active().filter(
         dealership__is_active=True
     )
-
     customer_offer = CustomerOffer.objects.get(id=customer_offer_id)
 
     dealership_cars = dealership__active_cars.filter(
@@ -20,7 +19,8 @@ def buy_car(customer_offer_id):
         price__lte=customer_offer.max_price,
         count__gte=1,
     )
-
+    if not dealership_cars:
+        return
     dealership_car = dealership_cars.order_by("price").first()
 
     if customer_offer.customer.balance >= dealership_car.price:

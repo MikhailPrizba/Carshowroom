@@ -1,6 +1,5 @@
 from django.dispatch import Signal
 from django.dispatch import receiver
-from django.db.models.signals import post_save
 from customer.models import CustomerOffer
 from customer.tasks import buy_car
 
