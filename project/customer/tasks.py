@@ -2,9 +2,10 @@ from celery import shared_task
 from dealership.models import Dealership, DealershipCar
 from customer.models import Customer, CustomerOffer
 from django.db import transaction
+from project.celery import app
 
 
-@shared_task
+@app.task
 def buy_car(customer_offer_id):
     dealership__active_cars = DealershipCar.objects.get_is_active().filter(
         dealership__is_active=True

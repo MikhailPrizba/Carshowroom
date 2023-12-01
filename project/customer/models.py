@@ -1,3 +1,4 @@
+from typing import Any
 from common.models import (
     MainInformationMixin,
     UserInformationMixin,
@@ -8,6 +9,7 @@ from common.models import (
 from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db import models
 from user.models import User
+from customer.signals import buy_car_signal
 
 
 class CustomerManager(ModelManagerMixin):
@@ -29,7 +31,10 @@ class CustomerQuerySet(CustomQuerySetMixin):
 
 
 class CustomerOfferManager(ModelManagerMixin):
-    pass
+    def create_instance(self, **kwargs):
+        instance = super().create_instance(**kwargs)
+        buy_car_signal.send(sender=CustomerOffer, instance=instance)
+        return instance
 
 
 class CustomerOfferQuerySet(CustomQuerySetMixin):

@@ -5,7 +5,6 @@ from customer.models import Customer, CustomerOffer
 from .serializer import CustomerSerializer, CustomerOfferSerializer
 from .permissions import UpdatePermission, IsCustomerOrSuperUser
 from rest_framework.permissions import IsAuthenticated
-from customer.signals import buy_car_signal
 
 
 @extend_schema(tags=["customer/v1"])
@@ -36,11 +35,10 @@ class CustomerOfferViewSet(viewsets.ModelViewSet):
         )
 
     def perform_create(self, serializer):
-        customer = Customer.objects.get(user=self.request.user)
-        serializer.validated_data["customer"] = customer
-
-        serializer.save()
-        buy_car_signal.send(sender=CustomerOffer, instance=serializer.instance)
+        serializer.validated_data["customer"] = Customer.objects.get(
+            user=self.request.user
+        )
+        CustomerOffer.objects.create_instance(**serializer.validated_data)
 
     def perform_destroy(self, instance):
         CustomerOffer.objects.soft_delete(instance)
