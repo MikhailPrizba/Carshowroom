@@ -28,7 +28,7 @@ SECRET_KEY = os.environ.get("DJANGO_SECRET_KEY")
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS =  os.environ.get("ALLOWED_HOSTS").split(",")
 
 
 # Application definition
@@ -99,12 +99,13 @@ WSGI_APPLICATION = "project.wsgi.application"
 
 DATABASES = {
     "default": {
-        "ENGINE": os.environ.get("PS_DB_ENGINE"),
-        "NAME": os.environ.get("PS_DB_NAME"),
-        "USER": os.environ.get("PS_DB_USER"),
-        "PASSWORD": os.environ.get("PS_DB_PASSWORD"),
-        "HOST": os.environ.get("PS_DB_HOST"),
-        "PORT": os.environ.get("PS_DB_PORT"),
+        "ENGINE": os.environ.get("POSTGRES_ENGINE"),
+        "NAME": os.environ.get("POSTGRES_DB"),
+        "USER": os.environ.get("POSTGRES_USER"),
+        "PASSWORD": os.environ.get("POSTGRES_PASSWORD"),
+        "HOST": os.environ.get("POSTGRES_HOST"),
+        "PORT": os.environ.get("POSTGRES_PORT"),
+
     }
 }
 

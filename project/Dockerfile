@@ -1,18 +1,20 @@
-FROM python:3.10-alpine
+FROM python:3.10
 
 WORKDIR /project
 
-# Копируем все файлы из текущего каталога в контейнер
+ENV PYTHONUNBUFFERED=1 \
+    PYTHONPATH="."
 COPY . .
+RUN pip install pipenv
 
-# Устанавливаем зависимости из Pipfile
-RUN pip install -r Pipfile
 
-# Копируем entrypoint.sh в контейнер
-COPY entrypoint.sh /project/entrypoint.sh
+RUN pipenv install --system --deploy --dev
+
+
 
 # Устанавливаем исполняемые права для entrypoint.sh
 RUN chmod +x /project/entrypoint.sh
+
 
 # Устанавливаем entrypoint
 ENTRYPOINT ["/project/entrypoint.sh"]
