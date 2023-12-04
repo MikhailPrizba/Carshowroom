@@ -38,7 +38,7 @@ class CustomerOfferViewSet(viewsets.ModelViewSet):
         serializer.validated_data["customer"] = Customer.objects.get(
             user=self.request.user
         )
-        serializer.save()
+        CustomerOffer.objects.create_instance(**serializer.validated_data)
 
     def perform_destroy(self, instance):
         CustomerOffer.objects.soft_delete(instance)

@@ -32,9 +32,9 @@ class DealershipCarManager(ModelManagerMixin):
         instance.dealership.save()
         instance.save()
 
-    def sell(self, instance, price):
+    def sell(self, instance):
         instance.count -= 1
-        instance.dealership.balance += price
+        instance.dealership.balance += instance.price
         instance.dealership.save()
         instance.save()
 
