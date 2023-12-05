@@ -28,7 +28,7 @@ SECRET_KEY = os.environ.get("DJANGO_SECRET_KEY")
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS =  os.environ.get("ALLOWED_HOSTS").split(",")
 
 
 # Application definition
@@ -48,10 +48,10 @@ THIRD_PARTY_APPS = [
     "drf_spectacular",
     "rest_framework.authtoken",
     "djoser",
+    "corsheaders",
 ]
 
 LOCAL_APPS = [
-    "common",
     "customer",
     "dealership",
     "supplier",
@@ -66,6 +66,7 @@ INSTALLED_APPS = [
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
+    "corsheaders.middleware.CorsMiddleware",
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
     "django.contrib.auth.middleware.AuthenticationMiddleware",
@@ -99,12 +100,13 @@ WSGI_APPLICATION = "project.wsgi.application"
 
 DATABASES = {
     "default": {
-        "ENGINE": os.environ.get("PS_DB_ENGINE"),
-        "NAME": os.environ.get("PS_DB_NAME"),
-        "USER": os.environ.get("PS_DB_USER"),
-        "PASSWORD": os.environ.get("PS_DB_PASSWORD"),
-        "HOST": os.environ.get("PS_DB_HOST"),
-        "PORT": os.environ.get("PS_DB_PORT"),
+        "ENGINE": os.environ.get("POSTGRES_ENGINE"),
+        "NAME": os.environ.get("POSTGRES_DB"),
+        "USER": os.environ.get("POSTGRES_USER"),
+        "PASSWORD": os.environ.get("POSTGRES_PASSWORD"),
+        "HOST": os.environ.get("POSTGRES_HOST"),
+        "PORT": os.environ.get("POSTGRES_PORT"),
+
     }
 }
 
@@ -213,3 +215,5 @@ CELERY_RESULT_BACKEND = os.environ.get("CELERY_RESULT_BACKEND")
 CELERY_BEAT_SCHEDULE = {
     "buy_car": {"task": "dealership.tasks.buy_car", "schedule": crontab(minute="*/1")},
 }
+
+CORS_ALLOW_ALL_ORIGINS = True
