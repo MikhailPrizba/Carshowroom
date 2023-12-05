@@ -19,7 +19,7 @@ services:
       - flower
 
   db:
-    image: postgres:15-alpine
+    image: postgres:14-alpine
     volumes:
       - postgres_data:/var/lib/postgresql/data/
     env_file:
@@ -61,7 +61,7 @@ services:
       - redis
   nginx:
     restart: always
-    image: nginx:1.25-alpine
+    image: nginx:1.23-alpine
     expose:
       - 8080
     ports:

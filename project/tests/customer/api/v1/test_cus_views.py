@@ -31,6 +31,8 @@ class TestCustomerViews:
     @pytest.fixture
     def url_detail(self, customer):
         return reverse("customer-detail", args=[customer.id])
+    
+
 
     def test_get_customer(self, customer_client: APIClient, url: str):
         # Arrange
@@ -43,7 +45,7 @@ class TestCustomerViews:
         assert len(response.data) == 1
 
     def test_create_customer(
-        self, customer_client: APIClient, customer_data: dict, url: str
+        self, customer_client: APIClient, customer_data: dict, url: str,
     ):
         # Arrange
         # Act
@@ -67,6 +69,10 @@ class TestCustomerViews:
 
 @pytest.mark.django_db
 class TestCustomerOffer:
+    
+    @pytest.fixture
+    def mock_buy_car(self, mocker):
+        return mocker.patch("customer.models.buy_car_signal.send")
     @pytest.fixture
     def customer_offer_data(self):
         data = {
@@ -104,7 +110,7 @@ class TestCustomerOffer:
         assert len(response.data) == 1
 
     def test_create_offer(
-        self, customer_client: APIClient, customer_offer_data: dict, url: str
+        self, customer_client: APIClient, customer_offer_data: dict, url: str,  mock_buy_car
     ):
         # Arrange
         # Act

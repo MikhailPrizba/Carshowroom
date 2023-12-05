@@ -48,10 +48,10 @@ THIRD_PARTY_APPS = [
     "drf_spectacular",
     "rest_framework.authtoken",
     "djoser",
+    "corsheaders",
 ]
 
 LOCAL_APPS = [
-    "common",
     "customer",
     "dealership",
     "supplier",
@@ -66,6 +66,7 @@ INSTALLED_APPS = [
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
+    "corsheaders.middleware.CorsMiddleware",
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
     "django.contrib.auth.middleware.AuthenticationMiddleware",
@@ -214,3 +215,5 @@ CELERY_RESULT_BACKEND = os.environ.get("CELERY_RESULT_BACKEND")
 CELERY_BEAT_SCHEDULE = {
     "buy_car": {"task": "dealership.tasks.buy_car", "schedule": crontab(minute="*/1")},
 }
+
+CORS_ALLOW_ALL_ORIGINS = True

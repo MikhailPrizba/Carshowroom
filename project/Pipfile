@@ -19,6 +19,9 @@ django-enum = "*"
 django-countries = "*"
 enum-properties = "*"
 gunicorn = "*"
+pytest-django = "*"
+django-dynamic-fixture = "*"
+django-cors-headers = "*"
 
 [dev-packages]
 flake8 = "*"
