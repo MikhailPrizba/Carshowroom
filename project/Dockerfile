@@ -5,6 +5,7 @@ WORKDIR /project
 ENV PYTHONUNBUFFERED=1 \
     PYTHONPATH="."
 COPY . .
+RUN pip install --upgrade pip
 RUN pip install pipenv
 
 

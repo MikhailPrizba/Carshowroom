@@ -3,11 +3,14 @@ version: '3.8'
 services:
   web:
     build: .
+    volumes:
+      - .:/project
+      - static:/project/static
     ports:
       - "8000:8000"
     env_file:
       - .env
-    command: python manage.py runserver 0.0.0.0:8000
+    command: gunicorn project.wsgi:application --bind 0.0.0.0:8000
     depends_on:
       - db
       - redis
@@ -16,7 +19,7 @@ services:
       - flower
 
   db:
-    image: postgres:14-alpine
+    image: postgres:15-alpine
     volumes:
       - postgres_data:/var/lib/postgresql/data/
     env_file:
@@ -56,6 +59,17 @@ services:
       - .env
     depends_on:
       - redis
+  nginx:
+    restart: always
+    image: nginx:1.25-alpine
+    expose:
+      - 8080
+    ports:
+      - "80:8080"
+    volumes:
+      - static:/project/static
+    depends_on:
+      - web
 
 volumes:
   postgres_data:
