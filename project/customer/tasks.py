@@ -1,5 +1,4 @@
-from celery import shared_task
-from dealership.models import Dealership, DealershipCar
+from dealership.models import DealershipCar
 from customer.models import Customer, CustomerOffer
 from django.db import transaction
 from project.celery import app
@@ -7,6 +6,20 @@ from project.celery import app
 
 @app.task
 def buy_car(customer_offer_id):
+    """
+    Process the purchase of a car based on a customer's offer.
+
+    This Celery task is responsible for handling the purchase of a car based on a
+    customer's offer. It retrieves active dealership cars that match the criteria
+    specified in the customer's offer and proceeds with the purchase if a suitable
+    car is found and the customer has sufficient balance.
+
+    Parameters:
+        customer_offer_id (int): The ID of the CustomerOffer instance.
+
+    Note:
+        This task is expected to be called asynchronously using Celery.
+    """
     dealership__active_cars = DealershipCar.objects.get_is_active().filter(
         dealership__is_active=True
     )

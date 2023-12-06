@@ -8,6 +8,10 @@ import uuid
 
 
 class MainInformationMixin(models.Model):
+    """
+    Main Information Mixin for common fields in models.
+    """
+
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     is_active = models.BooleanField(default=True)
     created = models.DateTimeField(auto_now_add=True)
@@ -18,6 +22,10 @@ class MainInformationMixin(models.Model):
 
 
 class UserInformationMixin(models.Model):
+    """
+    User Information Mixin for additional user-related fields.
+    """
+
     email_confirm = models.BooleanField(default=False)
     phone_number = models.CharField(
         blank=True,
@@ -31,6 +39,10 @@ class UserInformationMixin(models.Model):
 
 
 class CarInformationMixin(models.Model):
+    """
+    Car Information Mixin for common car-related fields in models.
+    """
+
     class CarType(TextChoices):
         SEDAN = "Sed", _("Sedan")
         COUPE = "Cou", _("Coupe")
@@ -51,7 +63,14 @@ class CarInformationMixin(models.Model):
 
 
 class CustomQuerySetMixin(models.QuerySet):
+    """
+    Custom QuerySet Mixin with additional methods.
+    """
+
     def get_is_active(self):
+        """
+        Return QuerySet filtering active instances.
+        """
         return self.filter(is_active=True)
 
 
@@ -63,22 +82,50 @@ class ModelManagerMixin(models.Manager):
     - None
 
     Methods:
-    - create_instance(username: str, email: str, password: str, **kwargs) -> ModelInstance:
-        Creates a new instance with the given user credentials and additional keyword arguments.
+    - create_instance(**kwargs) -> models.Model:
+        Creates a new instance with the given keyword arguments.
         Returns the created instance.
 
-    - update_instance(id: int, **kwargs) -> ModelInstance:
+    - update_instance(id: int, **kwargs) -> models.Model:
         Updates the instance with the specified ID using the provided keyword arguments.
         Returns the updated instance.
+
+    - soft_delete(instance: models.Model):
+        Soft deletes the given instance by setting 'is_active' to False.
     """
 
     def create_instance(self, **kwargs) -> models.Model:
+        """
+        Create a new instance with the given keyword arguments.
+
+        Args:
+        - kwargs: Additional keyword arguments.
+
+        Returns:
+        - models.Model: The created instance.
+        """
         return self.create(**kwargs)
 
     def update_instance(self, id: int, **kwargs) -> models.Model:
+        """
+        Update the instance with the specified ID using the provided keyword arguments.
+
+        Args:
+        - id: The ID of the instance to be updated.
+        - kwargs: Keyword arguments for updating the instance.
+
+        Returns:
+        - models.Model: The updated instance.
+        """
         self.filter(id=id).update(**kwargs)
         return self.get(id=id)
 
-    def soft_delete(self, instance):
+    def soft_delete(self, instance: models.Model):
+        """
+        Soft delete the given instance by setting 'is_active' to False.
+
+        Args:
+        - instance: The instance to be soft deleted.
+        """
         instance.is_active = False
         instance.save()
