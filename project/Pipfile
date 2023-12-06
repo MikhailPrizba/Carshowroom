@@ -22,6 +22,7 @@ gunicorn = "*"
 pytest-django = "*"
 django-dynamic-fixture = "*"
 django-cors-headers = "*"
+pre-commit = "*"
 
 [dev-packages]
 flake8 = "*"
