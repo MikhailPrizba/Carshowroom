@@ -14,7 +14,18 @@ from user.models import User
 
 
 class SupplierManager(ModelManagerMixin):
+    """Manager for the Supplier model."""
+
     def create_instance(self, **kwargs) -> models.Model:
+        """
+        Create a new instance of the Supplier model and associate it with the user.
+
+        Args:
+            **kwargs: Parameters for creating the instance.
+
+        Returns:
+            models.Model: Created instance.
+        """
         user = User.objects.create_user(
             user_role=User.UserRoleChoices.SUPPLIER, **kwargs.get("user")
         )
@@ -24,28 +35,46 @@ class SupplierManager(ModelManagerMixin):
 
 
 class SupplierQuerySet(CustomQuerySetMixin):
+    """Custom QuerySet for the Supplier model."""
+
     pass
 
 
 class SupplierCarManager(ModelManagerMixin):
+    """Manager for the SupplierCar model."""
+
     def sell(self, instance):
+        """
+        Reduce the quantity and save when selling a car.
+
+        Args:
+            instance: SupplierCar instance.
+        """
         instance.count -= 1
         instance.save()
 
 
 class SupplierCarQuerySet(CustomQuerySetMixin):
+    """Custom QuerySet for the SupplierCar model."""
+
     pass
 
 
 class SupplierOfferManager(ModelManagerMixin):
+    """Manager for the SupplierOffer model."""
+
     pass
 
 
 class SupplierOfferQuerySet(CustomQuerySetMixin):
+    """Custom QuerySet for the SupplierOffer model."""
+
     pass
 
 
 class Supplier(MainInformationMixin, UserInformationMixin):
+    """Model representing a supplier."""
+
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     foundation_year = models.PositiveIntegerField(
         validators=[
@@ -60,6 +89,8 @@ class Supplier(MainInformationMixin, UserInformationMixin):
 
 
 class SupplierCar(MainInformationMixin, CarInformationMixin):
+    """Model representing a car provided by a supplier."""
+
     supplier = models.ForeignKey(Supplier, on_delete=models.CASCADE)
     price = models.DecimalField(
         max_digits=12, decimal_places=2, validators=[MinValueValidator(0.00)]
@@ -69,6 +100,8 @@ class SupplierCar(MainInformationMixin, CarInformationMixin):
 
 
 class SupplierOffer(MainInformationMixin):
+    """Model representing an offer from a supplier to a dealership."""
+
     supplier = models.ForeignKey(Supplier, on_delete=models.CASCADE)
     dealership = models.ForeignKey(Dealership, on_delete=models.CASCADE)
     max_price = models.DecimalField(
